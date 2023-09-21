@@ -19,7 +19,7 @@ console.log(lab1.questionTwo({'product': 'Laptop', 'brand': 'Dell', 'price': 800
 
 // make 5 calls to questionThree
 console.log(lab1.questionThree([[3,3,3], [3,3,4], [5,4,2]])); 
-console.log(lab1.questionThree([[3,4,5], [3,7,8], [5,4,9]])); 
+console.log(lab1.questionThree([[3,4,5], [3,7,8], [5,5,7]])); 
 console.log(lab1.questionThree([[7,7,10], [3,4,5], [5,5,5]])); 
 console.log(lab1.questionThree([[9,10,15], [8,4,12], [48,52,28]]));
 console.log(lab1.questionThree([[7,5,5], [2,4,3], [8,5,6], [12,12,11]]));   
