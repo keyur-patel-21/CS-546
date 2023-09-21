@@ -5,10 +5,10 @@ import * as lab1 from './lab1.mjs';
 
 // make 5 calls to questionOne passing in different inputs
 console.log(lab1.questionOne(["Hello", "good", "weather", "today"])); // returns and then outputs: [9, false]
-console.log(lab1.questionOne(["Hii", "there!!", "this", "is", "Keyur!"]));  
-console.log(lab1.questionOne(['good', 'happy', 'joyful', 'excellent', 'wonderful'])); 
-console.log(lab1.questionOne(['sunny', 'cloudy', 'rainy', 'windy', 'stormy']));   
-console.log(lab1.questionOne(['today', 'tomorrow', 'yesterday', 'now', 'sooon']));     
+console.log(lab1.questionOne(["Hii", "there!!", "this", "is", "Keyur!"]));  // returns and then outputs: [8, true]
+console.log(lab1.questionOne(['good', 'happy', 'joyful', 'excellent', 'wonderful'])); // returns and then outputs: [11, false]
+console.log(lab1.questionOne(['sunny', 'cloudy', 'rainy', 'windy', 'stormy'])); // returns and then outputs: [7, false]
+console.log(lab1.questionOne(['today', 'tomorrow', 'yesterday', 'now', 'sooon'])); // returns and then outputs: [12, false]
 
 // make 5 calls to questionTwo passing in different inputs
 console.log(lab1.questionTwo({ a: 3, b: 2, c: 1, d: 7 }, { a: 6, b: 5, c: 4, e: 8 })); // Returns and then outputs: ["d","e"]
