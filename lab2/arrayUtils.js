@@ -19,20 +19,33 @@ let mergeCommonElements = (...args) => {
   const commonElements = [...new Set(flattenedArrays[0])].filter((element) =>
     flattenedArrays.every((arr) => arr.includes(element))
   );
+  
+  function customSorting(arr) {
+    const numbers = [];
+    const strings = [];
+  
+    for (const element of arr) {
+      if (typeof element === "number") {
+        numbers.push(element);
+      } else if (typeof element === "string") {
+        strings.push(element);
+      }
+    }
+  
+    numbers.sort((a, b) => a - b);
+    strings.sort((a, b) => a.localeCompare(b));
+    const result = [...numbers, ...strings];
+  
+    return result;
+  }
 
-  // Sort the common elements numerically first, then alphabetically for strings
-  // commonElements.sort((a, b) => {
-  //   if (typeof a === "number" && typeof b === "number") {
-  //     return a - b; // Sort numbers in ascending order
-  //   } else if (typeof a === "string" && typeof b === "string") {
-  //     return a.localeCompare(b); // Sort strings in ascending order
-  //   } else {
-  //     return 0; // Other types are not compared
-  //   }
-  // });
-   
+  let result = customSorting(commonElements);
 
-  return commonElements;
+  if(result.length<1){
+    throw "No common elements found."
+  }
+
+  return result;
 };
 
 let findTriangles = (arr) => {};
