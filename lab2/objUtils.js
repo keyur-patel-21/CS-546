@@ -2,7 +2,13 @@
       using the ES6 exports syntax. 
       DO NOT CHANGE THE FUNCTION NAMES
 */
-import  { isCardValid, getValueRank, isStraightFlush, isThreeOfAKind, isPair } from "./helpers.js";
+import {
+  isCardValid,
+  getValueRank,
+  isStraightFlush,
+  isThreeOfAKind,
+  isPair,
+} from "./helpers.js";
 
 let solvePuzzles = (puzzles, pieces) => {
   // Record the start time
@@ -126,8 +132,48 @@ let evaluatePokerHand = (hand, communityCards) => {
   }
 };
 
+let combineObjects = (arr) => {
+  // Check if the argument is an array
+  if (!Array.isArray(arr)) {
+    throw new Error("Input must be an array");
+  }
 
+  // Check if the array contains at least two objects
+  if (arr.length < 2) {
+    throw new Error("Array must contain at least two objects");
+  }
 
-let combineObjects = (arr) => {};
+  // Check if each object has at least 1 key/value
+  for (let i = 0; i < arr.length; i++) {
+    if (typeof arr[i] !== "object" || Object.keys(arr[i]).length === 0) {
+      throw new Error("Each object must have at least 1 key/value");
+    }
+  }
+
+  // Trim all string inputs
+  arr = arr.map((obj) => {
+    return Object.fromEntries(
+      Object.entries(obj).map(([key, value]) => [
+        key,
+        typeof value === "string" ? value.trim() : value,
+      ])
+    );
+  });
+
+  // Find common keys
+  const commonKeys = Object.keys(arr[0]).filter((key) =>
+    arr.every((obj) => key in obj)
+  );
+
+  // Create the result object
+  const result = {};
+
+  // Populate the result object with values
+  commonKeys.forEach((key) => {
+    result[key] = arr.map((obj) => obj[key]);
+  });
+
+  return result;
+};
 
 export { solvePuzzles, evaluatePokerHand, combineObjects };
