@@ -14,6 +14,14 @@ let mergeCommonElements = (...args) => {
     }
   }
 
+  for (const arr of args){
+    for (const item of arr){
+      if (typeof item !== "string" || typeof item !== "number" || !Array.isArray(item)){
+        throw "Array Element Should be String, Number or Array";
+      }
+    }
+  }
+
   const flattenedArrays = args.map((arr) => arr.flat(Infinity));
   
   const commonElements = [...new Set(flattenedArrays[0])].filter((element) =>
