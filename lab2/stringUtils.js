@@ -24,7 +24,68 @@ let emojiCounter = (message) => {
   return emojis ? emojis.length : 0;
 };
 
-let sortStockPrices = (lastStocks, currStocks) => {};
+let sortStockPrices = (lastStocks, currStocks) => {
+  // Check if both arguments exist and are strings
+  if (!lastStocks || !currStocks || typeof lastStocks !== 'string' || typeof currStocks !== 'string') {
+    throw new Error('Invalid input: Please provide valid strings for lastStocks and currStocks.');
+  }
+
+  // Trim input strings
+  lastStocks = lastStocks.trim();
+  currStocks = currStocks.trim();
+
+  // Convert strings to arrays of stock objects
+  const lastStocksArray = lastStocks.split('|').map(stock => {
+    const [symbol, price] = stock.split(',');
+    const trimmedSymbol = symbol.trim();
+    const trimmedPrice = parseFloat(price.trim());
+    
+    // Validate the format of stock ticker and price
+    if (!/^[a-zA-Z]{1,5}$/.test(trimmedSymbol) || isNaN(trimmedPrice)) {
+      throw new Error('Invalid input: Invalid format for stock ticker or price.');
+    }
+
+    return { symbol: trimmedSymbol, price: trimmedPrice };
+  });
+
+  const currStocksArray = currStocks.split('|').map(stock => {
+    const [symbol, price] = stock.split(',');
+    const trimmedSymbol = symbol.trim();
+    const trimmedPrice = parseFloat(price.trim());
+    
+    // Validate the format of stock ticker and price
+    if (!/^[a-zA-Z]{1,5}$/.test(trimmedSymbol) || isNaN(trimmedPrice)) {
+      throw new Error('Invalid input: Invalid format for stock ticker or price.');
+    }
+
+    return { symbol: trimmedSymbol, price: trimmedPrice };
+  });
+
+  // Check if both arrays contain the same stocks
+  const lastStockSymbols = lastStocksArray.map(stock => stock.symbol.toLowerCase());
+  const currStockSymbols = currStocksArray.map(stock => stock.symbol.toLowerCase());
+
+  if (!lastStockSymbols.every(symbol => currStockSymbols.includes(symbol))) {
+    throw 'Invalid input: Both strings must contain the same stocks (case-insensitive).';
+  }
+
+  // Merge the arrays and calculate the percentage change
+  const mergedStocks = lastStocksArray.map(lastStock => {
+    const currStock = currStocksArray.find(curr => curr.symbol.toLowerCase() === lastStock.symbol.toLowerCase());
+
+    if (!currStock) {
+      throw 'Invalid input: Stock symbol not found in current stocks.';
+    }
+
+    const change = ((currStock.price - lastStock.price) / lastStock.price) * 100;
+    return { symbol: lastStock.symbol, price: currStock.price, change: parseFloat(change.toFixed(1)) };
+  });
+
+  // Sort the array by percentage change
+  const sortedStocks = mergedStocks.sort((a, b) => b.change - a.change);
+
+  return sortedStocks;
+};
 
 let mashUp = (string1, string2) => {};
 
