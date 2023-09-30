@@ -87,6 +87,29 @@ let sortStockPrices = (lastStocks, currStocks) => {
   return sortedStocks;
 };
 
-let mashUp = (string1, string2) => {};
+let mashUp = (string1, string2) => {
+  // Check if both arguments exist and are strings
+  if (!string1 || !string2 || typeof string1 !== 'string' || typeof string2 !== 'string') {
+    throw 'Invalid input: Please provide valid strings for string1 and string2.';
+  }
+
+  // Trim input strings
+  string1 = string1.trim();
+  string2 = string2.trim();
+
+  // Check if the length of each string is at least 4 characters
+  if (string1.length < 4 || string2.length < 4) {
+    throw 'Invalid input: Both strings should have a length of at least 4 characters.';
+  }
+
+  // Check if both strings are not just strings with empty spaces
+  if (string1.trim() === '' || string2.trim() === '') {
+    throw 'Invalid input: Both strings should not be just strings with empty spaces.';
+  }
+
+  // Concatenate the strings, swapping the first 4 characters of each
+  const result = string2.slice(0, 4) + string1.slice(4) + ' ' + string1.slice(0, 4) + string2.slice(4);
+  return result;
+};
 
 export { emojiCounter, sortStockPrices, mashUp };
