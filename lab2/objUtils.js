@@ -2,6 +2,7 @@
       using the ES6 exports syntax. 
       DO NOT CHANGE THE FUNCTION NAMES
 */
+import  { isCardValid, getValueRank, isStraightFlush, isThreeOfAKind, isPair } from "./helpers.js";
 
 let solvePuzzles = (puzzles, pieces) => {
   // Record the start time
@@ -79,7 +80,53 @@ let solvePuzzles = (puzzles, pieces) => {
   return solvedPuzzles;
 };
 
-let evaluatePokerHand = (hand, communityCards) => {};
+let evaluatePokerHand = (hand, communityCards) => {
+  // Check if hand exists and has exactly two cards
+  if (
+    !hand ||
+    !Array.isArray(hand) ||
+    hand.length !== 2 ||
+    !hand.every((card) => isCardValid(card))
+  ) {
+    throw new Error(
+      "Invalid input: Hand should be an array with exactly two valid cards."
+    );
+  }
+
+  // Check if communityCards exists and has three to five cards
+  if (
+    !communityCards ||
+    !Array.isArray(communityCards) ||
+    communityCards.length < 3 ||
+    communityCards.length > 5 ||
+    !communityCards.every((card) => isCardValid(card))
+  ) {
+    throw new Error(
+      "Invalid input: Community cards should be an array with three to five valid cards."
+    );
+  }
+
+  // Combine hand and communityCards to form the player's full hand
+  const fullHand = [...hand, ...communityCards];
+
+  // Sort the cards by their values
+  const sortedHand = fullHand.sort(
+    (a, b) => getValueRank(b.value) - getValueRank(a.value)
+  );
+
+  // Check for the different poker hands
+  if (isStraightFlush(sortedHand)) {
+    return "Straight Flush";
+  } else if (isThreeOfAKind(sortedHand)) {
+    return "Three of a Kind";
+  } else if (isPair(sortedHand)) {
+    return "Pair";
+  } else {
+    return "High Card";
+  }
+};
+
+
 
 let combineObjects = (arr) => {};
 
