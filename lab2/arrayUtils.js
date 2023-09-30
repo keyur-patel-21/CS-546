@@ -56,7 +56,51 @@ let mergeCommonElements = (...args) => {
   return result;
 };
 
-let findTriangles = (arr) => {};
+let findTriangles = (arr) => {
+  if (!Array.isArray(arr) || arr.length === 0) {
+    throw 'Input must be a non-empty array of arrays';
+  }
+
+  const results = {};
+
+  for (let i = 0; i < arr.length; i++) {
+    const triangle = arr[i];
+
+    // Check if each element in the subarray is a number
+    if (
+      !Array.isArray(triangle) ||
+      triangle.length !== 3 ||
+      triangle.some((side) => typeof side !== 'number')
+    ) {
+      throw `Invalid input at index ${i}`;
+    }
+
+    // Check if it's a valid triangle (sum of any two sides must be greater than the third)
+    const [a, b, c] = triangle;
+    if (a + b <= c || a + c <= b || b + c <= a) {
+      throw `Invalid triangle at index ${i}`;
+    }
+
+    // Calculate area, perimeter, and triangle type
+    const s = (a + b + c) / 2;
+    const area = Math.sqrt(s * (s - a) * (s - b) * (s - c)).toFixed(2);
+    const perimeter = (a + b + c).toFixed(0);
+
+    let triangleType = '';
+    if (a === b && b === c) {
+      triangleType = 'equilateral';
+    } else if (a === b || b === c || a === c) {
+      triangleType = 'isosceles';
+    } else {
+      triangleType = 'scalene';
+    }
+
+    // Store the results in the object
+    results[i] = [parseFloat(area), parseInt(perimeter), triangleType];
+  }
+
+  return results;
+};
 
 let stringMetrics = (arr) => {};
 
