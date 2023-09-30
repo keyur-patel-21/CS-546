@@ -102,6 +102,51 @@ let findTriangles = (arr) => {
   return results;
 };
 
-let stringMetrics = (arr) => {};
+let stringMetrics = (arr) => {
+  if (!Array.isArray(arr) || arr.length < 2) {
+    throw "Input must be an array with at least two strings.";
+  }
+
+  const validStrings = arr.filter((str) => typeof str === "string" && str.trim() !== "");
+
+  if (validStrings.length !== arr.length) {
+    throw "Array must contain only non-empty strings.";
+  }
+
+  const lengths = validStrings.map((str) => str.length);
+  const vowels = validStrings.join("").match(/[aeiouAEIOU]/g).length;
+  const consonants = validStrings.join("").match(/[bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ]/g).length;
+  const sortedLengths = lengths.slice().sort((a, b) => a - b);
+  const medianIndex = Math.floor(sortedLengths.length / 2);
+  let mode = null;
+
+  if (sortedLengths.length % 2 === 0) {
+    mode = [sortedLengths[medianIndex - 1], sortedLengths[medianIndex]];
+  } else {
+    mode = [sortedLengths[medianIndex]];
+  }
+
+  // Convert mode to a single number if there's only one mode
+  if (mode.length === 1) {
+    mode = mode[0];
+  }
+
+  const mean = parseFloat((lengths.reduce((a, b) => a + b, 0) / lengths.length).toFixed(2));
+
+  const shortest = validStrings.filter((str) => str.length === sortedLengths[0]);
+  const longest = validStrings.filter((str) => str.length === sortedLengths[sortedLengths.length - 1]);
+
+  const result = {
+    vowels,
+    consonants,
+    longest: longest.length === 1 ? longest[0] : longest,
+    shortest: shortest.length === 1 ? shortest[0] : shortest,
+    mean,
+    median: medianIndex % 1 === 0 ? (sortedLengths[medianIndex - 1] + sortedLengths[medianIndex]) / 2 : sortedLengths[medianIndex],
+    mode,
+  };
+
+  return result;
+};
 
 export { mergeCommonElements, findTriangles, stringMetrics };
