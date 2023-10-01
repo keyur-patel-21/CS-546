@@ -87,66 +87,36 @@ let solvePuzzles = (puzzles, pieces) => {
 };
 
 let evaluatePokerHand = (hand, communityCards) => {
-  // Check if hand exists and has exactly two cards
-  if (
-    !hand ||
-    !Array.isArray(hand) ||
-    hand.length !== 2 ||
-    !hand.every((card) => isCardValid(card))
-  ) {
-    throw new Error(
-      "Invalid input: Hand should be an array with exactly two valid cards."
-    );
-  }
+  if (!hand || !Array.isArray(hand) || hand.length !== 2 || !hand.every(card => isCardValid(card)))
+    throw "Hand should be an array with exactly two valid cards.";
 
-  // Check if communityCards exists and has three to five cards
-  if (
-    !communityCards ||
-    !Array.isArray(communityCards) ||
-    communityCards.length < 3 ||
-    communityCards.length > 5 ||
-    !communityCards.every((card) => isCardValid(card))
-  ) {
-    throw new Error(
-      "Invalid input: Community cards should be an array with three to five valid cards."
-    );
-  }
+  if (!communityCards || !Array.isArray(communityCards) || communityCards.length < 3 || communityCards.length > 5 || !communityCards.every(card => isCardValid(card)))
+    throw "Community cards should be an array with three to five valid cards.";
 
-  // Combine hand and communityCards to form the player's full hand
-  const fullHand = [...hand, ...communityCards];
+  const sortedHand = [...hand, ...communityCards].sort((a, b) => getValueRank(b.value) - getValueRank(a.value));
 
-  // Sort the cards by their values
-  const sortedHand = fullHand.sort(
-    (a, b) => getValueRank(b.value) - getValueRank(a.value)
-  );
-
-  // Check for the different poker hands
-  if (isStraightFlush(sortedHand)) {
-    return "Straight Flush";
-  } else if (isThreeOfAKind(sortedHand)) {
-    return "Three of a Kind";
-  } else if (isPair(sortedHand)) {
-    return "Pair";
-  } else {
-    return "High Card";
-  }
+  if (isStraightFlush(sortedHand)) return "Straight Flush";
+  if (isThreeOfAKind(sortedHand)) return "Three of a Kind";
+  if (isPair(sortedHand)) return "Pair";
+  return "High Card";
 };
+
 
 let combineObjects = (arr) => {
   // Check if the argument is an array
   if (!Array.isArray(arr)) {
-    throw new Error("Input must be an array");
+    throw "Input must be an array";
   }
 
   // Check if the array contains at least two objects
   if (arr.length < 2) {
-    throw new Error("Array must contain at least two objects");
+    throw "Array must contain at least two objects";
   }
 
   // Check if each object has at least 1 key/value
   for (let i = 0; i < arr.length; i++) {
     if (typeof arr[i] !== "object" || Object.keys(arr[i]).length === 0) {
-      throw new Error("Each object must have at least 1 key/value");
+      throw "Each object must have at least 1 key/value";
     }
   }
 
