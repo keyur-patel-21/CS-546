@@ -98,20 +98,19 @@ let mashUp = (string1, string2) => {
   string1 = string1.trim();
   string2 = string2.trim();
 
-  if (string1.length < 4 || string2.length < 4) {
-    throw "Both strings should have a length of at least 4 characters.";
+  if (
+    string1.length < 4 ||
+    string2.length < 4 ||
+    string1.trim() === "" ||
+    string2.trim() === ""
+  ) {
+    throw "Both strings should have a length of at least 4 characters and should not be just strings with empty spaces.";
   }
 
-  if (string1.trim() === "" || string2.trim() === "") {
-    throw "Both strings should not be just strings with empty spaces.";
-  }
-
-  const result =
-    string2.slice(0, 4) +
-    string1.slice(4) +
-    " " +
-    string1.slice(0, 4) +
-    string2.slice(4);
+  const result = `${string2.slice(0, 4)}${string1.slice(4)} ${string1.slice(
+    0,
+    4
+  )}${string2.slice(4)}`;
   return result;
 };
 
