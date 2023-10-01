@@ -103,24 +103,16 @@ let evaluatePokerHand = (hand, communityCards) => {
 
 
 let combineObjects = (arr) => {
-  // Check if the argument is an array
-  if (!Array.isArray(arr)) {
-    throw "Input must be an array";
+  if (!Array.isArray(arr) || arr.length < 2) {
+    throw "Input must be an array with at least two objects";
   }
 
-  // Check if the array contains at least two objects
-  if (arr.length < 2) {
-    throw "Array must contain at least two objects";
-  }
-
-  // Check if each object has at least 1 key/value
   for (let i = 0; i < arr.length; i++) {
     if (typeof arr[i] !== "object" || Object.keys(arr[i]).length === 0) {
-      throw "Each object must have at least 1 key/value";
+      throw "Each object in the array must have at least one key/value";
     }
   }
 
-  // Trim all string inputs
   arr = arr.map((obj) => {
     return Object.fromEntries(
       Object.entries(obj).map(([key, value]) => [
@@ -130,20 +122,18 @@ let combineObjects = (arr) => {
     );
   });
 
-  // Find common keys
   const commonKeys = Object.keys(arr[0]).filter((key) =>
     arr.every((obj) => key in obj)
   );
 
-  // Create the result object
   const result = {};
 
-  // Populate the result object with values
   commonKeys.forEach((key) => {
     result[key] = arr.map((obj) => obj[key]);
   });
 
   return result;
-};
+}
+
 
 export { solvePuzzles, evaluatePokerHand, combineObjects };
