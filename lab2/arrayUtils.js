@@ -67,27 +67,24 @@ let findTriangles = (arr) => {
     throw "Input must be a non-empty array of arrays";
   }
 
-  const results = {};
+  const triDetails = {};
 
   for (let i = 0; i < arr.length; i++) {
     const triangle = arr[i];
 
-    // Check if each element in the subarray is a number
     if (
       !Array.isArray(triangle) ||
       triangle.length !== 3 ||
       triangle.some((side) => typeof side !== "number")
     ) {
-      throw `Invalid input at index ${i}`;
+      throw "You should input 3 sides of triangles in numbers only";
     }
 
-    // Check if it's a valid triangle (sum of any two sides must be greater than the third)
     const [a, b, c] = triangle;
     if (a + b <= c || a + c <= b || b + c <= a) {
-      throw `Invalid triangle at index ${i}`;
+      throw "please input valid triangles";
     }
 
-    // Calculate area, perimeter, and triangle type
     const s = (a + b + c) / 2;
     const area = Math.sqrt(s * (s - a) * (s - b) * (s - c)).toFixed(2);
     const perimeter = (a + b + c).toFixed(0);
@@ -101,11 +98,10 @@ let findTriangles = (arr) => {
       triangleType = "scalene";
     }
 
-    // Store the results in the object
-    results[i] = [parseFloat(area), parseInt(perimeter), triangleType];
+    triDetails[i] = [parseFloat(area), parseInt(perimeter), triangleType];
   }
 
-  return results;
+  return triDetails;
 };
 
 let stringMetrics = (arr) => {
