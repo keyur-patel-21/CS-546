@@ -109,59 +109,46 @@ let stringMetrics = (arr) => {
     throw "Input must be an array with at least two strings.";
   }
 
-  const validStrings = arr.filter(
-    (str) => typeof str === "string" && str.trim() !== ""
-  );
+  const validStrings = arr.filter((str) => typeof str === "string" && str.trim() !== "");
 
   if (validStrings.length !== arr.length) {
     throw "Array must contain only non-empty strings.";
   }
 
   const lengths = validStrings.map((str) => str.length);
-  const vowels = validStrings.join("").match(/[aeiouAEIOU]/g).length;
-  const consonants = validStrings
-    .join("")
-    .match(/[bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ]/g).length;
-  const sortedLengths = lengths.slice().sort((a, b) => a - b);
+  const joinedString = validStrings.join("");
+  const vowels = (joinedString.match(/[aeiouAEIOU]/g) || []).length;
+  const consonants = (joinedString.match(/[bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ]/g) || []).length;
+  const sortedLengths = [...lengths].sort((a, b) => a - b);
   const medianIndex = Math.floor(sortedLengths.length / 2);
-  let mode = null;
+  const modeOccurrences = {};
 
-  if (sortedLengths.length % 2 === 0) {
-    mode = [sortedLengths[medianIndex - 1], sortedLengths[medianIndex]];
-  } else {
-    mode = [sortedLengths[medianIndex]];
-  }
+  sortedLengths.forEach((length) => {
+    modeOccurrences[length] = (modeOccurrences[length] || 0) + 1;
+  });
 
-  // Convert mode to a single number if there's only one mode
-  if (mode.length === 1) {
-    mode = mode[0];
-  }
+  const modes = Object.entries(modeOccurrences)
+    .filter(([_, count]) => count === Math.max(...Object.values(modeOccurrences)))
+    .map(([length]) => parseInt(length))
+    .sort((a, b) => a - b);
 
-  const mean = parseFloat(
-    (lengths.reduce((a, b) => a + b, 0) / lengths.length).toFixed(2)
-  );
+  const mean = parseFloat((lengths.reduce((a, b) => a + b, 0) / lengths.length).toFixed(2));
 
-  const shortest = validStrings.filter(
-    (str) => str.length === sortedLengths[0]
-  );
-  const longest = validStrings.filter(
-    (str) => str.length === sortedLengths[sortedLengths.length - 1]
-  );
+  const findWordsByLength = (length) => validStrings.filter((str) => str.length === length);
+  const shortestLength = sortedLengths[0];
+  const longestLength = sortedLengths[sortedLengths.length - 1];
+  const shortest = findWordsByLength(shortestLength);
+  const longest = findWordsByLength(longestLength);
 
-  const result = {
+  return {
     vowels,
     consonants,
     longest: longest.length === 1 ? longest[0] : longest,
     shortest: shortest.length === 1 ? shortest[0] : shortest,
     mean,
-    median:
-      medianIndex % 1 === 0
-        ? (sortedLengths[medianIndex - 1] + sortedLengths[medianIndex]) / 2
-        : sortedLengths[medianIndex],
-    mode,
+    median: medianIndex % 1 === 0 ? (sortedLengths[medianIndex - 1] + sortedLengths[medianIndex]) / 2 : sortedLengths[medianIndex],
+    mode: modes.length === 0 ? null : modes.length === 1 ? modes[0] : modes,
   };
-
-  return result;
 };
 
 export { mergeCommonElements, findTriangles, stringMetrics };
