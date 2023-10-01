@@ -14,43 +14,49 @@ let mergeCommonElements = (...args) => {
     }
   }
 
-  for (const arr of args){
-    for (const item of arr){
-      if (typeof item !== "string" || typeof item !== "number" || !Array.isArray(item)){
-        throw "Array Element Should be String, Number or Array";
+  const flattenedArrays = args.map((arr) => arr.flat(Infinity));
+
+  for (const array of flattenedArrays) {
+    for (const element of array) {
+      if (
+        typeof element !== "string" &&
+        typeof element !== "number" &&
+        !Array.isArray(element)
+      ) {
+        throw "Elements should not be other than String, number, or array";
       }
     }
   }
 
-  const flattenedArrays = args.map((arr) => arr.flat(Infinity));
-  
   const commonElements = [...new Set(flattenedArrays[0])].filter((element) =>
     flattenedArrays.every((arr) => arr.includes(element))
   );
-  
+
   function customSorting(arr) {
-    const numbers = [];
-    const strings = [];
-  
+    let numbers = [];
+    let strings = [];
+
     for (const element of arr) {
       if (typeof element === "number") {
         numbers.push(element);
       } else if (typeof element === "string") {
         strings.push(element);
+      } else {
+        throw "Elements should not be other than String, number or array";
       }
     }
-  
+
     numbers.sort((a, b) => a - b);
-    strings.sort((a, b) => a.localeCompare(b));
+    strings = strings.sort();
     const result = [...numbers, ...strings];
-  
+
     return result;
   }
 
   let result = customSorting(commonElements);
 
-  if(result.length<1){
-    throw "No common elements found."
+  if (result.length < 1) {
+    throw "No common elements found.";
   }
 
   return result;
@@ -58,7 +64,7 @@ let mergeCommonElements = (...args) => {
 
 let findTriangles = (arr) => {
   if (!Array.isArray(arr) || arr.length === 0) {
-    throw 'Input must be a non-empty array of arrays';
+    throw "Input must be a non-empty array of arrays";
   }
 
   const results = {};
@@ -70,7 +76,7 @@ let findTriangles = (arr) => {
     if (
       !Array.isArray(triangle) ||
       triangle.length !== 3 ||
-      triangle.some((side) => typeof side !== 'number')
+      triangle.some((side) => typeof side !== "number")
     ) {
       throw `Invalid input at index ${i}`;
     }
@@ -86,13 +92,13 @@ let findTriangles = (arr) => {
     const area = Math.sqrt(s * (s - a) * (s - b) * (s - c)).toFixed(2);
     const perimeter = (a + b + c).toFixed(0);
 
-    let triangleType = '';
+    let triangleType = "";
     if (a === b && b === c) {
-      triangleType = 'equilateral';
+      triangleType = "equilateral";
     } else if (a === b || b === c || a === c) {
-      triangleType = 'isosceles';
+      triangleType = "isosceles";
     } else {
-      triangleType = 'scalene';
+      triangleType = "scalene";
     }
 
     // Store the results in the object
@@ -107,7 +113,9 @@ let stringMetrics = (arr) => {
     throw "Input must be an array with at least two strings.";
   }
 
-  const validStrings = arr.filter((str) => typeof str === "string" && str.trim() !== "");
+  const validStrings = arr.filter(
+    (str) => typeof str === "string" && str.trim() !== ""
+  );
 
   if (validStrings.length !== arr.length) {
     throw "Array must contain only non-empty strings.";
@@ -115,7 +123,9 @@ let stringMetrics = (arr) => {
 
   const lengths = validStrings.map((str) => str.length);
   const vowels = validStrings.join("").match(/[aeiouAEIOU]/g).length;
-  const consonants = validStrings.join("").match(/[bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ]/g).length;
+  const consonants = validStrings
+    .join("")
+    .match(/[bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ]/g).length;
   const sortedLengths = lengths.slice().sort((a, b) => a - b);
   const medianIndex = Math.floor(sortedLengths.length / 2);
   let mode = null;
@@ -131,10 +141,16 @@ let stringMetrics = (arr) => {
     mode = mode[0];
   }
 
-  const mean = parseFloat((lengths.reduce((a, b) => a + b, 0) / lengths.length).toFixed(2));
+  const mean = parseFloat(
+    (lengths.reduce((a, b) => a + b, 0) / lengths.length).toFixed(2)
+  );
 
-  const shortest = validStrings.filter((str) => str.length === sortedLengths[0]);
-  const longest = validStrings.filter((str) => str.length === sortedLengths[sortedLengths.length - 1]);
+  const shortest = validStrings.filter(
+    (str) => str.length === sortedLengths[0]
+  );
+  const longest = validStrings.filter(
+    (str) => str.length === sortedLengths[sortedLengths.length - 1]
+  );
 
   const result = {
     vowels,
@@ -142,7 +158,10 @@ let stringMetrics = (arr) => {
     longest: longest.length === 1 ? longest[0] : longest,
     shortest: shortest.length === 1 ? shortest[0] : shortest,
     mean,
-    median: medianIndex % 1 === 0 ? (sortedLengths[medianIndex - 1] + sortedLengths[medianIndex]) / 2 : sortedLengths[medianIndex],
+    median:
+      medianIndex % 1 === 0
+        ? (sortedLengths[medianIndex - 1] + sortedLengths[medianIndex]) / 2
+        : sortedLengths[medianIndex],
     mode,
   };
 
