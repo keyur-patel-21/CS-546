@@ -4,23 +4,15 @@
 */
 
 let emojiCounter = (message) => {
-  // Check if message exists and is a string
-  if (!message || typeof message !== 'string') {
-    throw 'Invalid input: Please provide a non-empty string as the message.';
+  if (!message || typeof message !== 'string' || message.trim() === '') {
+    throw 'Please provide a non-empty string as the message.';
   }
 
-  // Check if the message is not just an empty string with spaces
-  if (message.trim() === '') {
-    throw 'Invalid input: Message should not be an empty string with only spaces.';
-  }
+  let trimmedMessage = message.trim();
 
-  // Regular expression to match valid emojis
   const emojiRegex = /:[^:\s]+:/g;
+  const emojis = trimmedMessage.match(emojiRegex);
 
-  // Extract emojis from the message
-  const emojis = message.match(emojiRegex);
-
-  // Return the count of valid emojis
   return emojis ? emojis.length : 0;
 };
 
