@@ -8,5 +8,8 @@
     "start": "node app.js"
   },
   "author": "Keyur Patel 20010939",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.5.1"
+  }
 }
