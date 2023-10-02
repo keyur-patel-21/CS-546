@@ -109,7 +109,9 @@ let stringMetrics = (arr) => {
     throw "Input must be an array with at least two strings.";
   }
 
-  const validStrings = arr.filter((str) => typeof str === "string" && str.trim() !== "");
+  const validStrings = arr.filter(
+    (str) => typeof str === "string" && str.trim() !== ""
+  );
 
   if (validStrings.length !== arr.length) {
     throw "Array must contain only non-empty strings.";
@@ -118,7 +120,9 @@ let stringMetrics = (arr) => {
   const lengths = validStrings.map((str) => str.length);
   const joinedString = validStrings.join("");
   const vowels = (joinedString.match(/[aeiouAEIOU]/g) || []).length;
-  const consonants = (joinedString.match(/[bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ]/g) || []).length;
+  const consonants = (
+    joinedString.match(/[bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ]/g) || []
+  ).length;
   const sortedLengths = [...lengths].sort((a, b) => a - b);
   const medianIndex = Math.floor(sortedLengths.length / 2);
   const modeOccurrences = {};
@@ -128,13 +132,18 @@ let stringMetrics = (arr) => {
   });
 
   const modes = Object.entries(modeOccurrences)
-    .filter(([_, count]) => count === Math.max(...Object.values(modeOccurrences)))
+    .filter(
+      ([_, count]) => count === Math.max(...Object.values(modeOccurrences))
+    )
     .map(([length]) => parseInt(length))
     .sort((a, b) => a - b);
 
-  const mean = parseFloat((lengths.reduce((a, b) => a + b, 0) / lengths.length).toFixed(2));
+  const mean = parseFloat(
+    (lengths.reduce((a, b) => a + b, 0) / lengths.length).toFixed(2)
+  );
 
-  const findWordsByLength = (length) => validStrings.filter((str) => str.length === length);
+  const findWordsByLength = (length) =>
+    validStrings.filter((str) => str.length === length);
   const shortestLength = sortedLengths[0];
   const longestLength = sortedLengths[sortedLengths.length - 1];
   const shortest = findWordsByLength(shortestLength);
@@ -146,7 +155,10 @@ let stringMetrics = (arr) => {
     longest: longest.length === 1 ? longest[0] : longest,
     shortest: shortest.length === 1 ? shortest[0] : shortest,
     mean,
-    median: medianIndex % 1 === 0 ? (sortedLengths[medianIndex - 1] + sortedLengths[medianIndex]) / 2 : sortedLengths[medianIndex],
+    median:
+      medianIndex % 1 === 0
+        ? (sortedLengths[medianIndex - 1] + sortedLengths[medianIndex]) / 2
+        : sortedLengths[medianIndex],
     mode: modes.length === 0 ? null : modes.length === 1 ? modes[0] : modes,
   };
 };

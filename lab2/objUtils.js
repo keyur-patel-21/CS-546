@@ -11,96 +11,85 @@ import {
 } from "./helpers.js";
 
 let solvePuzzles = (puzzles, pieces) => {
-  // Record the start time
-  const startTime = new Date();
-
-  // Check if puzzles exist and are of valid type (array)
-  if (!puzzles || !Array.isArray(puzzles)) {
-    throw new Error("Invalid input: Puzzles must be an array.");
+  if (!Array.isArray(puzzles) || puzzles.length === 0) {
+    throw "Invalid puzzles array";
   }
 
-  // Check if puzzles is not an empty array
-  if (puzzles.length === 0) {
-    throw new Error("Invalid input: Puzzles array should not be empty.");
-  }
-
-  // Check if puzzles contains only objects, with at least one key/value in each object supplied
   if (
     !puzzles.every(
       (obj) => typeof obj === "object" && Object.keys(obj).length > 0
     )
   ) {
-    throw new Error(
-      "Invalid input: Puzzles array should only contain non-empty objects."
-    );
+    throw "Invalid puzzle objects";
   }
 
-  // Check if each puzzle object in the puzzles array contains only the keys a-e
-  if (
-    !puzzles.every((obj) =>
-      Object.keys(obj).every((key) => /^[a-e]$/.test(key))
-    )
-  ) {
-    throw new Error(
-      "Invalid input: Each puzzle object should contain only keys a-e."
-    );
+  if (typeof pieces !== "object" || Object.keys(pieces).length === 0) {
+    throw "Invalid pieces object";
   }
 
-  // Check if pieces is an object that has at least one key/value
-  if (
-    !pieces ||
-    typeof pieces !== "object" ||
-    Object.keys(pieces).length === 0
-  ) {
-    throw new Error(
-      "Invalid input: Pieces should be an object with at least one key/value."
-    );
+  const isValidKey = (key) => ["a", "b", "c", "d", "e"].includes(key);
+
+  for (let puzzle of puzzles) {
+    if (!Object.keys(puzzle).every(isValidKey)) {
+      throw "Invalid puzzle keys";
+    }
   }
 
-  // Check if each pieces object contains only the keys a-e
-  if (!Object.keys(pieces).every((key) => /^[a-e]$/.test(key))) {
-    throw new Error(
-      "Invalid input: Pieces object should contain only keys a-e."
-    );
+  if (!Object.keys(pieces).every(isValidKey)) {
+    throw "Invalid pieces keys";
   }
 
-  // Solve the puzzles by adding missing pieces
-  const solvedPuzzles = puzzles.map((puzzle) => {
-    const completedPuzzle = { ...puzzle };
+  function entirePuzzle(incomplete, pieces) {
+    const sortedKeys = ["a", "b", "c", "d", "e"];
 
-    Object.keys(pieces).forEach((key) => {
-      if (!(key in completedPuzzle)) {
-        completedPuzzle[key] = pieces[key];
+    const completePuzzle = sortedKeys.reduce((acc, key) => {
+      if (key in incomplete) {
+        acc[key] =
+          typeof incomplete[key] === "string"
+            ? incomplete[key].trim()
+            : incomplete[key];
+      } else if (key in pieces) {
+        acc[key] =
+          typeof pieces[key] === "string" ? pieces[key].trim() : pieces[key];
       }
-    });
+      return acc;
+    }, {});
 
-    return completedPuzzle;
-  });
+    return completePuzzle;
+  }
 
-  // Record the end time
-  const endTime = new Date();
-  const executionTime = endTime - startTime;
+  const result = puzzles.map((puzzle) => entirePuzzle(puzzle, pieces));
 
-  console.log(`Execution time: ${executionTime} milliseconds`);
-
-  return solvedPuzzles;
+  return result;
 };
 
 let evaluatePokerHand = (hand, communityCards) => {
-  if (!hand || !Array.isArray(hand) || hand.length !== 2 || !hand.every(card => isCardValid(card)))
+  if (
+    !hand ||
+    !Array.isArray(hand) ||
+    hand.length !== 2 ||
+    !hand.every((card) => isCardValid(card))
+  )
     throw "Hand should be an array with exactly two valid cards.";
 
-  if (!communityCards || !Array.isArray(communityCards) || communityCards.length < 3 || communityCards.length > 5 || !communityCards.every(card => isCardValid(card)))
+  if (
+    !communityCards ||
+    !Array.isArray(communityCards) ||
+    communityCards.length < 3 ||
+    communityCards.length > 5 ||
+    !communityCards.every((card) => isCardValid(card))
+  )
     throw "Community cards should be an array with three to five valid cards.";
 
-  const sortedHand = [...hand, ...communityCards].sort((a, b) => getValueRank(b.value) - getValueRank(a.value));
+  const sortedHand = [...hand, ...communityCards].sort(
+    (a, b) => getValueRank(b.value) - getValueRank(a.value)
+  );
 
   if (isStraightFlush(sortedHand)) return "Straight Flush";
   if (isThreeOfAKind(sortedHand)) return "Three of a Kind";
   if (isPair(sortedHand)) return "Pair";
   return "High Card";
 };
-
 
 let combineObjects = (arr) => {
   if (!Array.isArray(arr) || arr.length < 2) {
@@ -133,7 +122,6 @@ let combineObjects = (arr) => {
   });
 
   return result;
-}
-
+};
 
 export { solvePuzzles, evaluatePokerHand, combineObjects };

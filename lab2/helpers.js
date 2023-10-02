@@ -3,7 +3,21 @@
 */
 function isCardValid(card) {
   const validSuits = ["hearts", "clubs", "diamonds", "spades"];
-  const validValues = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"];
+  const validValues = [
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "J",
+    "Q",
+    "K",
+    "A",
+  ];
 
   if (
     card &&
@@ -21,14 +35,29 @@ function isCardValid(card) {
   }
 }
 
-
 function getValueRank(value) {
-  const valueOrder = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"];
+  const valueOrder = [
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "J",
+    "Q",
+    "K",
+    "A",
+  ];
   return valueOrder.indexOf(value);
 }
 
 function isStraightFlush(hand) {
-  const sortedValues = hand.map((card) => getValueRank(card.value)).sort((a, b) => a - b);
+  const sortedValues = hand
+    .map((card) => getValueRank(card.value))
+    .sort((a, b) => a - b);
 
   for (let i = 1; i < sortedValues.length; i++) {
     if (sortedValues[i] - sortedValues[i - 1] !== 1) {
@@ -66,7 +95,5 @@ function hasNOfAKind(hand, n) {
 
   return false;
 }
-
-
 
 export { isCardValid, getValueRank, isStraightFlush, isThreeOfAKind, isPair };

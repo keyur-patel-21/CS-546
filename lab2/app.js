@@ -110,14 +110,14 @@ try {
 
 try {
   console.log(
-    solvePuzzles([{ b: "tree", d: "patrick" }], {
-      a: "house",
-      b: "apple",
-      c: 50,
-      d: 100,
-      e: 200,
-    })
-  ); //returns [{a: “house”,b: “tree”, c: 50, d: “patrick”, e:200}]
+    solvePuzzles(
+      [
+        { a: 23, b: 17, d: 2 },
+        { b: 17, d: 3, e: "hello" },
+      ],
+      { a: 45, b: 60, c: -3, d: 88, e: 12 }
+    )
+  ); //returns [{a: 23, b: 17, c:-3, d: 2, e:12}, {a:45, b: 17, c:-3, d: 3, e: “hello”} ]
 } catch (e) {
   console.log(e);
 }
@@ -196,4 +196,3 @@ try {
 } catch (e) {
   console.log(e);
 }
-
