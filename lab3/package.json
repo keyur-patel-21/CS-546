@@ -1,0 +1,12 @@
+{
+  "name": "cs-546-lab-3",
+  "version": "1.0.0",
+  "description": "This is my lab 3 for CS 546",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "Keyur Patel 20010939",
+  "license": "ISC"
+}
