@@ -15,7 +15,7 @@ const authors = await getAuthors();
 
 const getAuthorById = async (id) => {
   if (typeof id !== "string" || id.trim() === "") {
-    throw "The 'id' parameter is either absent or not a valid string."
+    throw "The 'id' parameter is either absent or not a valid string.";
   }
 
   id = id.trim();
@@ -29,7 +29,33 @@ const getAuthorById = async (id) => {
   return author;
 };
 
-const searchAuthorByName = async (searchTerm) => {};
+const searchAuthorByName = async (searchTerm) => {
+  if (typeof searchTerm !== 'string') {
+    throw 'searchTerm must be a string';
+  }
+
+  searchTerm = searchTerm.trim().toLowerCase();
+
+  if (searchTerm.length === 0) {
+    throw 'searchTerm cannot be empty';
+  }
+
+  const authorsResult = authors.filter((author) => {
+    const fullName = `${author.first_name} ${author.last_name}`;
+    const fullNameLower = fullName.toLowerCase();
+    return fullNameLower.includes(searchTerm);
+  });
+
+  if (authorsResult.length === 0) {
+    throw 'No authors found for the provided searchTerm';
+  }
+
+  authorsResult.sort((a, b) => a.last_name.localeCompare(b.last_name));
+
+  const result = authorsResult.map((author) => `${author.first_name} ${author.last_name}`);
+
+  return result;
+};
 
 const getBookNames = async (firstName, lastName) => {};
 
