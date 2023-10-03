@@ -103,7 +103,44 @@ const getBookNames = async (firstName, lastName) => {
 
 const youngestOldest = async () => {};
 
-const sameBirthday = async (month, day) => {};
+const sameBirthday = async (month, day) => {
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+
+  if (typeof month !== 'number' || typeof day !== 'number') {
+    throw "Month and day must be numbers";
+  }
+
+  if (month < 1 || month > 12) {
+    throw "Month must be between 1 and 12";
+  }
+
+  const daysInMonth = new Date(2023, month, 0).getDate();
+  if (day < 1 || day > daysInMonth) {
+    throw `There are not ${day} days in ${monthNames[month - 1]}`;
+  }
+
+  const matchingAuthors = authors
+    .filter(author => {
+      const [authorMonth, authorDay] = author.date_of_birth.split("/").map(Number);
+      return authorMonth === month && authorDay === day;
+    })
+    .map(author => `${author.first_name} ${author.last_name}`);
+
+  if (matchingAuthors.length < 2) {
+    throw "There are no two authors with the same birthday";
+  }
+
+  matchingAuthors.sort((a, b) => {
+    const lastNameA = a.split(" ")[1];
+    const lastNameB = b.split(" ")[1];
+    return lastNameA.localeCompare(lastNameB);
+  });
+
+  return matchingAuthors;
+};
 
 export {
   getAuthorById,
