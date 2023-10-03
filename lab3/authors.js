@@ -38,14 +38,14 @@ const getAuthorById = async (id) => {
 };
 
 const searchAuthorByName = async (searchTerm) => {
-  if (typeof searchTerm !== 'string') {
-    throw 'searchTerm must be a string';
+  if (typeof searchTerm !== "string") {
+    throw "searchTerm must be a string";
   }
 
   searchTerm = searchTerm.trim().toLowerCase();
 
   if (searchTerm.length === 0) {
-    throw 'searchTerm cannot be empty';
+    throw "searchTerm cannot be empty";
   }
 
   const authorsResult = authors.filter((author) => {
@@ -55,30 +55,34 @@ const searchAuthorByName = async (searchTerm) => {
   });
 
   if (authorsResult.length === 0) {
-    throw 'No authors found for the provided searchTerm';
+    throw "No authors found for the provided searchTerm";
   }
 
   authorsResult.sort((a, b) => a.last_name.localeCompare(b.last_name));
 
-  const result = authorsResult.map((author) => `${author.first_name} ${author.last_name}`);
+  const result = authorsResult.map(
+    (author) => `${author.first_name} ${author.last_name}`
+  );
 
   return result;
 };
 
 const getBookNames = async (firstName, lastName) => {
-  if (typeof firstName !== 'string' || typeof lastName !== 'string') {
-    throw 'firstName and lastName must be strings';
+  if (typeof firstName !== "string" || typeof lastName !== "string") {
+    throw "firstName and lastName must be strings";
   }
 
   firstName = firstName.trim().toLowerCase();
   lastName = lastName.trim().toLowerCase();
 
   if (firstName.length === 0 || lastName.length === 0) {
-    throw 'firstName and lastName cannot be empty';
+    throw "firstName and lastName cannot be empty";
   }
 
-  const author = authors.find((author) =>
-    author.first_name.toLowerCase() === firstName && author.last_name.toLowerCase() === lastName
+  const author = authors.find(
+    (author) =>
+      author.first_name.toLowerCase() === firstName &&
+      author.last_name.toLowerCase() === lastName
   );
 
   if (!author) {
