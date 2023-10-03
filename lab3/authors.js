@@ -11,7 +11,15 @@ async function getAuthors() {
   return data; // this will be the array of author objects
 }
 
+async function getBooks() {
+  const { data } = await axios.get(
+    "https://gist.githubusercontent.com/graffixnyc/3381b3ba73c249bfcab1e44d836acb48/raw/e14678cd750a4c4a93614a33a840607dd83fdacc/books.json"
+  );
+  return data; // this will be the array of author objects
+}
+
 const authors = await getAuthors();
+const books = await getBooks();
 
 const getAuthorById = async (id) => {
   if (typeof id !== "string" || id.trim() === "") {
