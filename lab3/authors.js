@@ -65,7 +65,37 @@ const searchAuthorByName = async (searchTerm) => {
   return result;
 };
 
-const getBookNames = async (firstName, lastName) => {};
+const getBookNames = async (firstName, lastName) => {
+  if (typeof firstName !== 'string' || typeof lastName !== 'string') {
+    throw 'firstName and lastName must be strings';
+  }
+
+  firstName = firstName.trim().toLowerCase();
+  lastName = lastName.trim().toLowerCase();
+
+  if (firstName.length === 0 || lastName.length === 0) {
+    throw 'firstName and lastName cannot be empty';
+  }
+
+  const author = authors.find((author) =>
+    author.first_name.toLowerCase() === firstName && author.last_name.toLowerCase() === lastName
+  );
+
+  if (!author) {
+    throw `No author found with the name ${firstName} ${lastName}`;
+  }
+
+  if (!author.books || author.books.length === 0) {
+    throw `Author ${firstName} ${lastName} has not written any books`;
+  }
+
+  const bookTitles = author.books
+    .map((bookId) => books.find((book) => book.id === bookId)?.title)
+    .filter((title) => title !== undefined)
+    .sort();
+
+  return bookTitles;
+};
 
 const youngestOldest = async () => {};
 
