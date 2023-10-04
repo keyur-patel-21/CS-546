@@ -44,7 +44,24 @@ const getAuthorName = async (bookId) => {
   return result;
 };
 
-const sameGenre = async (genre) => {};
+const sameGenre = async (genre) => {
+  if (!genre || typeof genre !== 'string' || genre.trim() === '') {
+    throw 'Invalid genre parameter';
+  }
+
+  const normalizedGenre = genre.toLowerCase();
+
+  const result = books.filter(book =>
+    book.genres.map(genre => genre.toLowerCase()).includes(normalizedGenre)
+  );
+  
+
+  if (result.length === 0) {
+    throw 'No books found for the provided genre';
+  }
+
+  return result;
+};
 
 const priceRange = async (min, max) => {};
 
