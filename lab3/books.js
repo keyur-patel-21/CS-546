@@ -45,36 +45,34 @@ const getAuthorName = async (bookId) => {
 };
 
 const sameGenre = async (genre) => {
-  if (!genre || typeof genre !== 'string' || genre.trim() === '') {
-    throw 'Invalid genre parameter';
+  if (!genre || typeof genre !== "string" || genre.trim() === "") {
+    throw "Invalid genre parameter";
   }
 
   const normalizedGenre = genre.toLowerCase();
 
-  const result = books.filter(book =>
-    book.genres.map(genre => genre.toLowerCase()).includes(normalizedGenre)
+  const result = books.filter((book) =>
+    book.genres.map((genre) => genre.toLowerCase()).includes(normalizedGenre)
   );
-  
 
   if (result.length === 0) {
-    throw 'No books found for the provided genre';
+    throw "No books found for the provided genre";
   }
 
   return result;
 };
 
 const priceRange = async (min, max) => {
-
-  if (!min || !max){
-    throw "input Valid Price Range"
+  if (!min || !max) {
+    throw "input Valid Price Range";
   }
 
   if (typeof min !== "number" || typeof max !== "number") {
     throw "Both min and max must be numbers.";
   }
 
-  if (min < 0 || max < 0 ){
-    throw "price can not be less than 0"
+  if (min < 0 || max < 0) {
+    throw "price can not be less than 0";
   }
 
   if (min > max) {
@@ -92,7 +90,33 @@ const priceRange = async (min, max) => {
   return booksInPriceRange.length;
 };
 
-const getAllBooksWithAuthorName = async () => {};
+const getAllBooksWithAuthorName = async () => {
+  const booksWithAuthorName = [];
+
+  for (const book of books) {
+    const author = authors.find((author) => author.id === book.authorId);
+    if (author) {
+      const bookWithAuthorName = {
+        id: book.id,
+        title: book.title,
+        genres: book.genres,
+        publicationDate: book.publicationDate,
+        publisher: book.publisher,
+        summary: book.summary,
+        isbn: book.isbn,
+        language: book.language,
+        pageCount: book.pageCount,
+        price: book.price,
+        format: book.format,
+        author: `${author.first_name} ${author.last_name}`,
+      };
+
+      booksWithAuthorName.push(bookWithAuthorName);
+    }
+  }
+
+  return booksWithAuthorName;
+};
 
 export {
   getBookById,
