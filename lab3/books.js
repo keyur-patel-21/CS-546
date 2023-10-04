@@ -63,7 +63,34 @@ const sameGenre = async (genre) => {
   return result;
 };
 
-const priceRange = async (min, max) => {};
+const priceRange = async (min, max) => {
+
+  if (!min || !max){
+    throw "input Valid Price Range"
+  }
+
+  if (typeof min !== "number" || typeof max !== "number") {
+    throw "Both min and max must be numbers.";
+  }
+
+  if (min < 0 || max < 0 ){
+    throw "price can not be less than 0"
+  }
+
+  if (min > max) {
+    throw "min must be less than or equal to max.";
+  }
+
+  const booksInPriceRange = books.filter((book) => {
+    return book.price >= min && book.price <= max;
+  });
+
+  if (booksInPriceRange.length === 0) {
+    throw "No books found within the specified price range.";
+  }
+
+  return booksInPriceRange.length;
+};
 
 const getAllBooksWithAuthorName = async () => {};
 
