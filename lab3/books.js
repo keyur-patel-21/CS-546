@@ -21,7 +21,28 @@ const getBookById = async (id) => {
   return boook;
 };
 
-const getAuthorName = async (bookId) => {};
+const getAuthorName = async (bookId) => {
+  if (typeof bookId !== "string" || bookId.trim() === "") {
+    throw "The 'id' parameter is either absent or not a valid string.";
+  }
+
+  bookId = bookId.trim();
+
+  const book = books.find((a) => a.id === bookId);
+
+  if (!book) {
+    throw "Book not found";
+  }
+  const author = authors.find((a) => a.id === book.authorId);
+
+  if (!author) {
+    throw "author not found";
+  }
+
+  const result = `${author.first_name} ${author.last_name}`;
+
+  return result;
+};
 
 const sameGenre = async (genre) => {};
 
