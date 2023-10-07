@@ -26,6 +26,10 @@ const getBookById = async (id) => {
 };
 
 const getAuthorName = async (bookId) => {
+  if (!bookId) {
+    throw "please provide bookId";
+  }
+
   if (typeof bookId !== "string" || bookId.trim() === "") {
     throw "The 'id' parameter is either absent or not a valid string.";
   }
