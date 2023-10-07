@@ -125,12 +125,12 @@ const youngestOldest = async () => {
       const date = new Date(author.date_of_birth);
       return (
         date.getTime() ===
-        new Date(result.youngestAuthor.date_of_birth).getTime()
+        new Date(youngestAuthor.date_of_birth).getTime()
       );
     });
     result.oldest = tiedAuthors.map(
       (author) => `${author.first_name} ${author.last_name}`
-    );
+    ).sort();
   }
 
   return result;
