@@ -98,7 +98,7 @@ const priceRange = async (min, max) => {
     throw "No books found within the specified price range.";
   }
 
-  return booksInPriceRange.length;
+  return booksInPriceRange;
 };
 
 const getAllBooksWithAuthorName = async () => {
