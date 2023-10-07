@@ -101,62 +101,37 @@ const getBookNames = async (firstName, lastName) => {
 };
 
 const youngestOldest = async () => {
-  const authors = await getAuthors();
-
   if (authors.length === 0) {
-    // Handle the case when there are no authors in the data.
     return { youngest: null, oldest: null };
   }
 
-  // Sort authors by date_of_birth in ascending order.
   authors.sort((a, b) => {
     const dateA = new Date(a.date_of_birth);
     const dateB = new Date(b.date_of_birth);
+
     return dateA - dateB;
   });
 
-  const youngestAuthor = authors[0];
-  const oldestAuthor = authors[authors.length - 1];
-
-  // Check for ties in the youngest and oldest authors.
-  const youngestAuthors = [youngestAuthor];
-  const oldestAuthors = [oldestAuthor];
-
-  for (let i = 1; i < authors.length; i++) {
-    const author = authors[i];
-    const youngestDiff =
-      new Date(author.date_of_birth) - new Date(youngestAuthor.date_of_birth);
-    const oldestDiff =
-      new Date(author.date_of_birth) - new Date(oldestAuthor.date_of_birth);
-
-    if (youngestDiff === 0) {
-      youngestAuthors.push(author);
-    }
-
-    if (oldestDiff === 0) {
-      oldestAuthors.push(author);
-    }
-  }
-
-  // Sort tied authors by last name.
-  youngestAuthors.sort((a, b) => a.last_name.localeCompare(b.last_name));
-  oldestAuthors.sort((a, b) => a.last_name.localeCompare(b.last_name));
-
-  const youngestAuthorNames = youngestAuthors.map(
-    (author) => `${author.first_name} ${author.last_name}`
-  );
-  const oldestAuthorNames = oldestAuthors.map(
-    (author) => `${author.first_name} ${author.last_name}`
-  );
+  const youngestAuthor = authors[authors.length - 1];
+  const oldestAuthor = authors[0];
 
   const result = {
-    youngest:
-      youngestAuthorNames.length === 1
-        ? youngestAuthorNames[0]
-        : youngestAuthorNames,
-    oldest:
-      oldestAuthorNames.length === 1 ? oldestAuthorNames[0] : oldestAuthorNames,
+    youngest: `${youngestAuthor.first_name} ${youngestAuthor.last_name}`,
+    oldest: `${oldestAuthor.first_name} ${oldestAuthor.last_name}`,
   };
+
+  if (result.youngest === result.oldest) {
+    const tiedAuthors = authors.filter((author) => {
+      const date = new Date(author.date_of_birth);
+      return (
+        date.getTime() ===
+        new Date(result.youngestAuthor.date_of_birth).getTime()
+      );
+    });
+    result.oldest = tiedAuthors.map(
+      (author) => `${author.first_name} ${author.last_name}`
+    );
+  }
 
   return result;
 };
