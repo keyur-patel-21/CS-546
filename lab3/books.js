@@ -6,6 +6,10 @@ const authors = await getAuthors();
 const books = await getBooks();
 
 const getBookById = async (id) => {
+  if (!id) {
+    throw "please provide id";
+  }
+
   if (typeof id !== "string" || id.trim() === "") {
     throw "The 'id' parameter is either absent or not a valid string.";
   }
