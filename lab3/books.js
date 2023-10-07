@@ -53,6 +53,9 @@ const getAuthorName = async (bookId) => {
 };
 
 const sameGenre = async (genre) => {
+  if (!genre) {
+    throw "please provide genre";
+  }
   if (!genre || typeof genre !== "string" || genre.trim() === "") {
     throw "Invalid genre parameter";
   }
