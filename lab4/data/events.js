@@ -12,7 +12,11 @@ const create = async (
   publicEvent
 ) => {};
 
-const getAll = async () => {};
+const getAll = async () => {
+  // lkjhbiuh
+  // 3ytbh4yhj
+  // jnhono
+};
 
 const get = async (id) => {};
 
