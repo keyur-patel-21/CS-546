@@ -19,3 +19,11 @@ const get = async (id) => {};
 const remove = async (id) => {};
 
 const rename = async (id, newEventName) => {};
+
+export {
+  create,
+  getAll,
+  get,
+  remove,
+  rename,
+};
