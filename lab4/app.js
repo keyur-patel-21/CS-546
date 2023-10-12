@@ -1,3 +1,5 @@
+import * as events from './events.js';
+
 /*
     1. Create a event of your choice.
     2. Log the newly created event. (Just that event, not all events)
