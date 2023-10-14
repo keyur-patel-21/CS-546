@@ -172,6 +172,34 @@ const remove = async (id) => {
 };
 
 
-const rename = async (id, newEventName) => {};
+const rename = async (id, newEventName) => {
+  if (!id) throw 'You must provide an id to search for';
+  if (typeof id !== 'string') throw 'Id must be a string';
+  if (id.trim().length === 0)
+    throw 'Id cannot be an empty string or just spaces';
+  id = id.trim();
+  if (!ObjectId.isValid(id)) throw 'invalid object ID';
+  if (!newEventName) throw 'You must provide a name for your event';
+  if (typeof newEventName !== 'string') throw 'Name must be a string';
+  if (newEventName.trim().length === 0) throw 'Name cannot be an empty string or string with just spaces';
+  nanewEventNameme = newEventName.trim();
+
+  const updatedEvent = {
+    eventName: nanewEventNameme,
+  };
+  const eventCollection = await events();
+  const updatedInfo = await eventCollection.findOneAndUpdate(
+    {_id: new ObjectId(id)},
+    {$set: updatedEvent},
+    {returnDocument: 'after'}
+  );
+  if (!updatedInfo) {
+    throw 'could not update event successfully';
+  }
+  updatedInfo._id = updatedInfo._id.toString();
+  return updatedInfo;
+};
+
+
 
 export { create, getAll, get, remove, rename };
