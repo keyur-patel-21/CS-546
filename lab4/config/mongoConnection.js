@@ -1,5 +1,3 @@
-
-
 import {MongoClient} from 'mongodb';
 import {mongoConfig} from './settings.js';
 
@@ -14,7 +12,6 @@ export const dbConnection = async () => {
 
   return _db;
 };
-
 export const closeConnection = async () => {
   await _connection.close();
 };
