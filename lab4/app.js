@@ -1,7 +1,13 @@
-import * as events from './events.js';
+import * as events from './data/events.js';
+
+// 1. Create a event of your choice.
+
+const patrickBBQ = await events.create("Patrick's Big End of Summer BBQ","Come join us for our yearly end of summer bbq!",{streetAddress: "1 Castle Point Terrace", city: "Hoboken", state: "NJ", zip: "07030"}, "phill@stevens.edu",30,0,"08/25/2024","2:00PM","8:00PM",false);
+console.log(patrickBBQ);
 
 /*
     1. Create a event of your choice.
+
     2. Log the newly created event. (Just that event, not all events)
     3. Create another event of your choice.
     4. Query all events, and log them all
