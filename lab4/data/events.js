@@ -153,9 +153,24 @@ const get = async (id) => {
   return event;
 };
 
+const remove = async (id) => {
+  if (!id) throw 'You must provide an id to search for';
+  if (typeof id !== 'string') throw 'Id must be a string';
+  if (id.trim().length === 0)
+    throw 'id cannot be an empty string or just spaces';
+  id = id.trim();
+  if (!ObjectId.isValid(id)) throw 'invalid object ID';
+  const eventCollection = await events();
+  const deletionInfo = await eventCollection.findOneAndDelete({
+    _id: new ObjectId(id)
+  });
 
+  if (!deletionInfo) {
+    throw `Could not delete event with id of ${id}`;
+  }
+  return `eventName: ${deletionInfo.name}, deleted: true`;
+};
 
-const remove = async (id) => {};
 
 const rename = async (id, newEventName) => {};
 
