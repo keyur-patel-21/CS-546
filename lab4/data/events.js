@@ -1,8 +1,13 @@
 // TODO: Export and implement the following functions in ES6 format
-import {events} from '../config/mongoCollections.js';
-import {ObjectId} from 'mongodb';
-import { isValidEmail, isValidDate, isValidTime, isValidState, isValidZip } from "../helpers.js";
-
+import { events } from "../config/mongoCollections.js";
+import { ObjectId } from "mongodb";
+import {
+  isValidEmail,
+  isValidDate,
+  isValidTime,
+  isValidState,
+  isValidZip,
+} from "../helpers.js";
 
 const create = async (
   eventName,
@@ -17,27 +22,30 @@ const create = async (
   publicEvent
 ) => {
   if (typeof eventName !== "string" || eventName.trim().length < 5) {
-    throw new Error("Invalid eventName");
+    throw "Invalid eventName";
   }
 
-  if (typeof eventDescription !== "string" || eventDescription.trim().length < 25) {
-    throw new Error("Invalid eventDescription");
+  if (
+    typeof eventDescription !== "string" ||
+    eventDescription.trim().length < 25
+  ) {
+    throw "Invalid eventDescription";
   }
 
   if (!isValidEmail(contactEmail)) {
-    throw new Error("Invalid contactEmail");
+    throw "Invalid contactEmail";
   }
 
   if (!isValidDate(eventDate)) {
-    throw new Error("Invalid eventDate");
+    throw "Invalid eventDate";
   }
 
   if (!isValidTime(startTime)) {
-    throw new Error("Invalid startTime");
+    throw "Invalid startTime";
   }
 
   if (!isValidTime(endTime)) {
-    throw new Error("Invalid endTime");
+    throw "Invalid endTime";
   }
 
   const eventDateObj = new Date(eventDate);
@@ -45,29 +53,33 @@ const create = async (
   const endTimeObj = new Date(`01/01/2000 ${endTime}`);
 
   if (eventDateObj <= new Date()) {
-    throw new Error("EventDate must be in the future");
+    throw "EventDate must be in the future";
   }
 
   if (startTimeObj >= endTimeObj) {
-    throw new Error("Invalid time range");
+    throw "Invalid time range";
   }
 
   const timeDifference = endTimeObj - startTimeObj;
   if (timeDifference < 30 * 60 * 1000) {
-    throw new Error("endTime should be at least 30 minutes later than startTime");
+    throw "endTime should be at least 30 minutes later than startTime";
   }
 
   if (typeof publicEvent !== "boolean") {
-    throw new Error("Invalid publicEvent");
-
+    throw "Invalid publicEvent";
   }
 
-  if (typeof maxCapacity !== "number" || typeof priceOfAdmission !== "number" || maxCapacity <= 0 || priceOfAdmission < 0) {
-    throw new Error("Invalid maxCapacity or priceOfAdmission");
+  if (
+    typeof maxCapacity !== "number" ||
+    typeof priceOfAdmission !== "number" ||
+    maxCapacity <= 0 ||
+    priceOfAdmission < 0
+  ) {
+    throw "Invalid maxCapacity or priceOfAdmission";
   }
 
   if (typeof eventLocation !== "object") {
-    throw new Error("Invalid eventLocation");
+    throw "Invalid eventLocation";
   }
 
   if (
@@ -80,7 +92,7 @@ const create = async (
     typeof eventLocation.zip !== "string" ||
     !isValidZip(eventLocation.zip)
   ) {
-    throw new Error("Invalid eventLocation properties");
+    throw "Invalid eventLocation properties";
   }
 
   const newEvent = {
@@ -105,7 +117,7 @@ const create = async (
 
   const insertInfo = await eventCollection.insertOne(newEvent);
   if (!insertInfo.acknowledged || !insertInfo.insertedId)
-    throw 'Could not add Event';
+    throw "Could not add Event";
 
   const newId = insertInfo.insertedId.toString();
 
@@ -116,7 +128,7 @@ const create = async (
 const getAll = async () => {
   const eventCollection = await events();
   let eventList = await eventCollection.find({}).toArray();
-  if (!eventList) throw 'Could not get all Events';
+  if (!eventList) throw "Could not get all Events";
   eventList = eventList.map((element) => {
     element._id = element._id.toString();
     return element;
@@ -125,29 +137,29 @@ const getAll = async () => {
 };
 
 const get = async (id) => {
-  if (!id) throw 'You must provide an id to search for';
-  if (typeof id !== 'string') throw 'Id must be a string';
+  if (!id) throw "You must provide an id to search for";
+  if (typeof id !== "string") throw "Id must be a string";
   if (id.trim().length === 0)
-    throw 'Id cannot be an empty string or just spaces';
+    throw "Id cannot be an empty string or just spaces";
   id = id.trim();
-  if (!ObjectId.isValid(id)) throw 'invalid object ID';
+  if (!ObjectId.isValid(id)) throw "invalid object ID";
   const eventCollection = await events();
-  const event = await eventCollection.findOne({_id: new ObjectId(id)});
-  if (event === null) throw 'No event with that id';
+  const event = await eventCollection.findOne({ _id: new ObjectId(id) });
+  if (event === null) throw "No event with that id";
   event._id = event._id.toString();
   return event;
 };
 
 const remove = async (id) => {
-  if (!id) throw 'You must provide an id to search for';
-  if (typeof id !== 'string') throw 'Id must be a string';
+  if (!id) throw "You must provide an id to search for";
+  if (typeof id !== "string") throw "Id must be a string";
   if (id.trim().length === 0)
-    throw 'id cannot be an empty string or just spaces';
+    throw "id cannot be an empty string or just spaces";
   id = id.trim();
-  if (!ObjectId.isValid(id)) throw 'invalid object ID';
+  if (!ObjectId.isValid(id)) throw "invalid object ID";
   const eventCollection = await events();
   const deletionInfo = await eventCollection.findOneAndDelete({
-    _id: new ObjectId(id)
+    _id: new ObjectId(id),
   });
 
   if (!deletionInfo) {
@@ -156,17 +168,17 @@ const remove = async (id) => {
   return `eventName: ${deletionInfo.name}, deleted: true`;
 };
 
-
 const rename = async (id, newEventName) => {
-  if (!id) throw 'You must provide an id to search for';
-  if (typeof id !== 'string') throw 'Id must be a string';
+  if (!id) throw "You must provide an id to search for";
+  if (typeof id !== "string") throw "Id must be a string";
   if (id.trim().length === 0)
-    throw 'Id cannot be an empty string or just spaces';
+    throw "Id cannot be an empty string or just spaces";
   id = id.trim();
-  if (!ObjectId.isValid(id)) throw 'invalid object ID';
-  if (!newEventName) throw 'You must provide a name for your event';
-  if (typeof newEventName !== 'string') throw 'Name must be a string';
-  if (newEventName.trim().length === 0) throw 'Name cannot be an empty string or string with just spaces';
+  if (!ObjectId.isValid(id)) throw "invalid object ID";
+  if (!newEventName) throw "You must provide a name for your event";
+  if (typeof newEventName !== "string") throw "Name must be a string";
+  if (newEventName.trim().length === 0)
+    throw "Name cannot be an empty string or string with just spaces";
   nanewEventNameme = newEventName.trim();
 
   const updatedEvent = {
@@ -174,17 +186,15 @@ const rename = async (id, newEventName) => {
   };
   const eventCollection = await events();
   const updatedInfo = await eventCollection.findOneAndUpdate(
-    {_id: new ObjectId(id)},
-    {$set: updatedEvent},
-    {returnDocument: 'after'}
+    { _id: new ObjectId(id) },
+    { $set: updatedEvent },
+    { returnDocument: "after" }
   );
   if (!updatedInfo) {
-    throw 'could not update event successfully';
+    throw "could not update event successfully";
   }
   updatedInfo._id = updatedInfo._id.toString();
   return updatedInfo;
 };
-
-
 
 export { create, getAll, get, remove, rename };
