@@ -129,9 +129,14 @@ const create = async (
 };
 
 const getAll = async () => {
-  // lkjhbiuh
-  // 3ytbh4yhj
-  // jnhono
+  const eventCollection = await events();
+  let eventList = await eventCollection.find({}).toArray();
+  if (!eventList) throw 'Could not get all Events';
+  eventList = eventList.map((element) => {
+    element._id = element._id.toString();
+    return element;
+  });
+  return eventList;
 };
 
 const get = async (id) => {};
