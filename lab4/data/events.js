@@ -16,74 +16,60 @@ const create = async (
   endTime,
   publicEvent
 ) => {
-  // Check if eventName is a valid string
   if (typeof eventName !== "string" || eventName.trim().length < 5) {
     throw new Error("Invalid eventName");
   }
 
-  // Check if eventDescription is a valid string
   if (typeof eventDescription !== "string" || eventDescription.trim().length < 25) {
     throw new Error("Invalid eventDescription");
   }
 
-  // Check if contactEmail is a valid email address
   if (!isValidEmail(contactEmail)) {
     throw new Error("Invalid contactEmail");
   }
 
-  // Check if eventDate is a valid date
   if (!isValidDate(eventDate)) {
     throw new Error("Invalid eventDate");
   }
 
-  // Check if startTime is a valid time
   if (!isValidTime(startTime)) {
     throw new Error("Invalid startTime");
   }
 
-  // Check if endTime is a valid time
   if (!isValidTime(endTime)) {
     throw new Error("Invalid endTime");
   }
 
-  // Convert eventDate, startTime, and endTime to Date objects
   const eventDateObj = new Date(eventDate);
   const startTimeObj = new Date(`01/01/2000 ${startTime}`);
   const endTimeObj = new Date(`01/01/2000 ${endTime}`);
 
-  // Check if eventDate is in the future
   if (eventDateObj <= new Date()) {
     throw new Error("EventDate must be in the future");
   }
 
-  // Check if startTime is before endTime
   if (startTimeObj >= endTimeObj) {
     throw new Error("Invalid time range");
   }
 
-  // Check if endTime is at least 30 minutes later than startTime
   const timeDifference = endTimeObj - startTimeObj;
   if (timeDifference < 30 * 60 * 1000) {
     throw new Error("endTime should be at least 30 minutes later than startTime");
   }
 
-  // Check if publicEvent is a boolean
   if (typeof publicEvent !== "boolean") {
     throw new Error("Invalid publicEvent");
 
   }
 
-  // Check if maxCapacity and priceOfAdmission are valid numbers
   if (typeof maxCapacity !== "number" || typeof priceOfAdmission !== "number" || maxCapacity <= 0 || priceOfAdmission < 0) {
     throw new Error("Invalid maxCapacity or priceOfAdmission");
   }
 
-  // Check if eventLocation is an object
   if (typeof eventLocation !== "object") {
     throw new Error("Invalid eventLocation");
   }
 
-  // Check if eventLocation properties are valid strings
   if (
     typeof eventLocation.streetAddress !== "string" ||
     eventLocation.streetAddress.trim().length < 3 ||
@@ -97,7 +83,6 @@ const create = async (
     throw new Error("Invalid eventLocation properties");
   }
 
-  // Create the event object
   const newEvent = {
     eventName: eventName,
     description: eventDescription,
@@ -124,7 +109,7 @@ const create = async (
 
   const newId = insertInfo.insertedId.toString();
 
-  const event = await this.get(newId);
+  const event = await get(newId);
   return event;
 };
 
