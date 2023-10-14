@@ -8,5 +8,8 @@
     "start": "node app.js"
   },
   "author": "Keyur Patel 20010939",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "mongodb": "^6.1.0"
+  }
 }
