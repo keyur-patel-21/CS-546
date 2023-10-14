@@ -165,7 +165,11 @@ const remove = async (id) => {
   if (!deletionInfo) {
     throw `Could not delete event with id of ${id}`;
   }
-  return `eventName: ${deletionInfo.name}, deleted: true`;
+
+  return {
+    eventName: deletionInfo.value.name,
+    deleted: true
+  };
 };
 
 const rename = async (id, newEventName) => {
