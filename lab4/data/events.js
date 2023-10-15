@@ -118,7 +118,6 @@ const create = async (
   const insertInfo = await eventCollection.insertOne(newEvent);
   if (!insertInfo.acknowledged || !insertInfo.insertedId)
     throw "Could not add Event";
-
   const newId = insertInfo.insertedId.toString();
 
   const event = await get(newId);
@@ -167,8 +166,8 @@ const remove = async (id) => {
   }
 
   return {
-    eventName: deletionInfo.value.name,
-    deleted: true
+    eventName: deletionInfo.eventName,
+    deleted: true,
   };
 };
 
@@ -180,14 +179,15 @@ const rename = async (id, newEventName) => {
 
   if (!newEventName) throw "You must provide a name for your event";
   newEventName = newEventName.trim();
-  if (newEventName.length === 0) throw "Name cannot be an empty string or string with just spaces";
+  if (newEventName.length === 0)
+    throw "Name cannot be an empty string or string with just spaces";
   if (newEventName.length < 5) throw "Name must be at least 5 characters long";
 
   const updatedEvent = {
     eventName: newEventName,
   };
 
-  const eventCollection = await events(); 
+  const eventCollection = await events();
 
   const updatedInfo = await eventCollection.findOneAndUpdate(
     { _id: new ObjectId(id) },
@@ -195,12 +195,12 @@ const rename = async (id, newEventName) => {
     { returnDocument: "after" }
   );
 
-  if (!updatedInfo.value) {
+  if (!updatedInfo) {
     throw "Could not update event successfully";
   }
 
-  updatedInfo.value._id = updatedInfo.value._id.toString();
-  return updatedInfo.value;
+  updatedInfo._id = updatedInfo._id.toString();
+  return updatedInfo;
 };
 
 export { create, getAll, get, remove, rename };
