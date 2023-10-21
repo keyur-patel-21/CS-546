@@ -36,7 +36,7 @@ const getAuthorById = async (id) => {
   const author = authors.find((a) => a.id === id);
 
   if (!author) {
-    throw "Author not found!!";
+    throw "Author not found!";
   }
 
   return author;
@@ -56,7 +56,7 @@ const getBookById = async (id) => {
   const boook = books.find((a) => a.id === id);
 
   if (!boook) {
-    throw "Book not found!!";
+    throw "Book not found!";
   }
 
   return boook;
