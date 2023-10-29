@@ -99,9 +99,11 @@ const create = async (
     maxCapacity: maxCapacity,
     priceOfAdmission: priceOfAdmission,
     eventDate: eventDate,
-    startTime: startTime,
-    endTime: endTime,
+    startTime: startTime.match(/^(?:[1-9]|1[0-2]):[0-5][0-9] [AP]M$/)[0],
+    endTime: endTime.match(/^(?:[1-9]|1[0-2]):[0-5][0-9] [AP]M$/)[0], 
     publicEvent: publicEvent,
+    attendees: [],
+    totalNumberOfAttendees: 0,
   };
 
   const eventCollection = await events();
