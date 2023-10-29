@@ -62,7 +62,32 @@ const createAttendee = async (eventId, firstName, lastName, emailAddress) => {
 };
 
 const getAllAttendees = async (eventId) => {
-  //Implement Code here
+  if (!eventId) {
+    throw 'Event ID is required.';
+  }
+
+  if (typeof eventId !== 'string' || eventId.trim() === '') {
+    throw 'Event ID must be a non-empty string.';
+  }
+
+  let eventObjectId;
+  try {
+    eventObjectId = new ObjectId(eventId);
+  } catch (err) {
+    throw 'Invalid Event ID. It should be a valid ObjectId.';
+  }
+
+  const event = await events.findOne({ _id: eventObjectId });
+
+  if (!event) {
+    throw 'Event not found with the provided Event ID.';
+  }
+
+  if (!Array.isArray(event.attendees)) {
+    return []; 
+  }
+
+  return event.attendees;
 };
 
 const getAttendee = async (attendeeId) => {
