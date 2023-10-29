@@ -139,3 +139,5 @@ const removeAttendee = async (attendeeId) => {
 
   return event;
 };
+
+export { createAttendee, getAllAttendees, getAttendee, removeAttendee };

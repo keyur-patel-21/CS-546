@@ -288,3 +288,5 @@ const update = async (
   const event = await get(newId);
   return event;
 };
+
+export { create, getAll, get, remove, update };
