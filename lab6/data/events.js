@@ -100,7 +100,7 @@ const create = async (
     priceOfAdmission: priceOfAdmission,
     eventDate: eventDate,
     startTime: startTime.match(/^(?:[1-9]|1[0-2]):[0-5][0-9] [AP]M$/)[0],
-    endTime: endTime.match(/^(?:[1-9]|1[0-2]):[0-5][0-9] [AP]M$/)[0], 
+    endTime: endTime.match(/^(?:[1-9]|1[0-2]):[0-5][0-9] [AP]M$/)[0],
     publicEvent: publicEvent,
     attendees: [],
     totalNumberOfAttendees: 0,
@@ -128,13 +128,12 @@ const getAll = async () => {
   return eventList;
 };
 
-
 const get = async (eventId) => {
   if (!eventId) throw "You must provide an id to search for";
   if (typeof eventId !== "string") throw "Id must be a string";
   if (id.trim().length === 0)
     throw "Id cannot be an empty string or just spaces";
-    eventId = eventId.trim();
+  eventId = eventId.trim();
   if (!ObjectId.isValid(eventId)) throw "invalid object ID";
   const eventCollection = await events();
   const event = await eventCollection.findOne({ _id: new ObjectId(eventId) });
@@ -144,7 +143,25 @@ const get = async (eventId) => {
 };
 
 const remove = async (eventId) => {
-  //Implement Code here
+  if (!eventId) throw "You must provide an id to search for";
+  if (typeof eventId !== "string") throw "Id must be a string";
+  if (eventId.trim().length === 0)
+    throw "id cannot be an empty string or just spaces";
+  eventId = eventId.trim();
+  if (!ObjectId.isValid(eventId)) throw "invalid object ID";
+  const eventCollection = await events();
+  const deletionInfo = await eventCollection.findOneAndDelete({
+    _id: new ObjectId(eventId),
+  });
+
+  if (!deletionInfo) {
+    throw `Could not delete event with id of ${eventId}`;
+  }
+
+  return {
+    eventName: deletionInfo.eventName,
+    deleted: true,
+  };
 };
 
 const update = async (
