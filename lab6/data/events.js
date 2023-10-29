@@ -121,12 +121,13 @@ const getAll = async () => {
   const eventCollection = await events();
   let eventList = await eventCollection.find({}).toArray();
   if (!eventList) throw "Could not get all Events";
-  eventList = eventList.map((element) => {
-    element._id = element._id.toString();
-    return element;
-  });
+  eventList = eventList.map((element) => ({
+    _id: element._id.toString(),
+    eventName: element.eventName,
+  }));
   return eventList;
 };
+
 
 const get = async (eventId) => {
   //Implement Code here
