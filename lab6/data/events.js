@@ -130,7 +130,17 @@ const getAll = async () => {
 
 
 const get = async (eventId) => {
-  //Implement Code here
+  if (!eventId) throw "You must provide an id to search for";
+  if (typeof eventId !== "string") throw "Id must be a string";
+  if (id.trim().length === 0)
+    throw "Id cannot be an empty string or just spaces";
+    eventId = eventId.trim();
+  if (!ObjectId.isValid(eventId)) throw "invalid object ID";
+  const eventCollection = await events();
+  const event = await eventCollection.findOne({ _id: new ObjectId(eventId) });
+  if (event === null) throw "No event with that id";
+  event._id = event._id.toString();
+  return event;
 };
 
 const remove = async (eventId) => {
