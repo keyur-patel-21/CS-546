@@ -111,5 +111,31 @@ const getAttendee = async (attendeeId) => {
 };
 
 const removeAttendee = async (attendeeId) => {
-  //Implement Code here
+  if (!attendeeId) {
+    throw "attendeeId is required";
+  }
+
+  attendeeId = attendeeId.trim();
+
+  if (!ObjectId.isValid(attendeeId)) {
+    throw "Invalid ObjectId format for attendeeId";
+  }
+
+  const event = await events.findOne({ "attendees._id": ObjectId(attendeeId) });
+
+  if (!event) {
+    throw "Event not found for the specified attendeeId";
+  }
+
+  const attendeeIndex = event.attendees.findIndex((attendee) =>
+    attendee._id.equals(ObjectId(attendeeId))
+  );
+
+  event.attendees.splice(attendeeIndex, 1);
+
+  event.totalNumberOfAttendees = event.attendees.length;
+
+  await events.updateOne({ _id: event._id }, { $set: event });
+
+  return event;
 };
