@@ -3,6 +3,13 @@
 import { Router } from "express";
 const router = Router();
 import { eventData } from "../data/index.js";
+import {
+  isValidEmail,
+  isValidDate,
+  isValidTime,
+  isValidState,
+  isValidZip,
+} from "../helpers.js";
 // import validation from '../validation.js';
 
 router
@@ -21,7 +28,7 @@ router
 
     // Ensure the request body is not empty
     if (!eventData || Object.keys(eventData).length === 0) {
-      return res.status(400).json({ error: "Request body is empty" });
+      return res.status(400).json({ error: "All fields need to have valid values" });
     }
 
     try {
