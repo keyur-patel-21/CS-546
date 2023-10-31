@@ -9,6 +9,7 @@ import {
   isValidTime,
   isValidState,
   isValidZip,
+  checkId,
 } from "../helpers.js";
 // import validation from '../validation.js';
 
@@ -190,6 +191,18 @@ router
   .route("/:eventId")
   .get(async (req, res) => {
     //code here for GET
+    try {
+      req.params.id = checkId(req.params.id, "Id URL Param");
+    } catch (e) {
+      return res.status(400).json({ error: e });
+    }
+    //try getting the event by ID
+    try {
+      const event = await eventData.get(req.params.id);
+      res.json(event);
+    } catch (e) {
+      res.status(404).json({ error: e });
+    }
   })
   .delete(async (req, res) => {
     //code here for DELETE
