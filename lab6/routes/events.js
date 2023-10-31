@@ -206,6 +206,18 @@ router
   })
   .delete(async (req, res) => {
     //code here for DELETE
+    try {
+      req.params.id = checkId(req.params.id, 'Id URL Param');
+    } catch (e) {
+      return res.status(400).json({error: e});
+    }
+    //try to delete Event
+    try {
+      let deletedEvent = await eventData.remove(req.params.id);
+      res.json(deletedEvent);
+    } catch (e) {
+      res.status(404).json({error: e});
+    }
   })
   .put(async (req, res) => {
     //code here for PUT
