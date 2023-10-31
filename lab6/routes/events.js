@@ -28,7 +28,9 @@ router
 
     // Ensure the request body is not empty
     if (!eventData || Object.keys(eventData).length === 0) {
-      return res.status(400).json({ error: "All fields need to have valid values" });
+      return res
+        .status(400)
+        .json({ error: "All fields need to have valid values" });
     }
 
     try {
@@ -138,11 +140,33 @@ router
       // Convert maxCapacity to an integer
       eventData.maxCapacity = parseInt(eventData.maxCapacity);
 
+      if (typeof eventData.eventLocation !== "object") {
+        throw "Invalid eventLocation";
+      }
+
+      if (
+        typeof eventData.eventLocation.streetAddress !== "string" ||
+        eventData.eventLocation.streetAddress.trim().length < 3 ||
+        typeof eventData.eventLocation.city !== "string" ||
+        eventData.eventLocation.city.trim().length < 3 ||
+        typeof eventData.eventLocation.state !== "string" ||
+        !isValidState(eventData.eventLocation.state) ||
+        typeof eventData.eventLocation.zip !== "string" ||
+        !isValidZip(eventData.eventLocation.zip)
+      ) {
+        throw "Invalid eventLocation properties";
+      }
+
       // Create the event object
       const newEvent = {
         eventName: eventData.eventName,
         description: eventData.description,
-        eventLocation: eventData.eventLocation,
+        eventLocation: {
+          streetAddress: eventData.eventLocation.streetAddress,
+          city: eventData.eventLocation.city,
+          state: eventData.eventLocation.state,
+          zip: eventData.eventLocation.zip,
+        },
         contactEmail: eventData.contactEmail.trim(),
         maxCapacity: eventData.maxCapacity,
         priceOfAdmission: parseFloat(eventData.priceOfAdmission),
