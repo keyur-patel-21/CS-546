@@ -1,8 +1,19 @@
 // Import the express router as shown in the lecture code
 // Note: please do not forget to export the router!
-
+import { Router } from "express";
+const router = Router();
+import { eventData } from "../data/index.js";
+import { attendeeData } from "../data/index.js";
+import {
+  isValidEmail,
+  isValidDate,
+  isValidTime,
+  isValidState,
+  isValidZip,
+  checkId,
+} from "../helpers.js";
 router
-  .route('/:eventId')
+  .route("/:eventId")
   .get(async (req, res) => {
     //code here for GET
   })
@@ -11,10 +22,12 @@ router
   });
 
 router
-  .route('/attendee/:attendeeId')
+  .route("/attendee/:attendeeId")
   .get(async (req, res) => {
     //code here for GET
   })
   .delete(async (req, res) => {
     //code here for DELETE
   });
+
+export default router;
