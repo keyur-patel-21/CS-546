@@ -44,13 +44,13 @@ router
         throw "Invalid or missing eventName";
       }
 
-      // Validate description
+      // Validate eventDescription
       if (
-        !eventData.description ||
-        typeof eventData.description !== "string" ||
-        eventData.description.trim().length < 25
+        !eventData.eventDescription ||
+        typeof eventData.eventDescription !== "string" ||
+        eventData.eventDescription.trim().length < 25
       ) {
-        throw "Invalid or missing description";
+        throw "Invalid or missing eventDescription";
       }
 
       // Validate contactEmail
@@ -161,7 +161,7 @@ router
       // Create the event object
       const newEvent = {
         eventName: eventData.eventName,
-        description: eventData.description,
+        eventDescription: eventData.eventDescription,
         eventLocation: {
           streetAddress: eventData.eventLocation.streetAddress,
           city: eventData.eventLocation.city,
