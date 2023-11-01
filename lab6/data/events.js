@@ -9,284 +9,286 @@ import {
   isValidZip,
 } from "../helpers.js";
 
-const create = async (
-  eventName,
-  eventDescription,
-  eventLocation,
-  contactEmail,
-  maxCapacity,
-  priceOfAdmission,
-  eventDate,
-  startTime,
-  endTime,
-  publicEvent
-) => {
-  if (typeof eventName !== "string" || eventName.trim().length < 5) {
-    throw "Invalid eventName";
-  }
-
-  if (
-    typeof eventDescription !== "string" ||
-    eventDescription.trim().length < 25
+const exportedMethods = {
+  async create(
+    eventName,
+    eventDescription,
+    eventLocation,
+    contactEmail,
+    maxCapacity,
+    priceOfAdmission,
+    eventDate,
+    startTime,
+    endTime,
+    publicEvent
   ) {
-    throw "Invalid eventDescription";
-  }
+    if (typeof eventName !== "string" || eventName.trim().length < 5) {
+      throw "Invalid eventName";
+    }
 
-  if (!isValidEmail(contactEmail)) {
-    throw "Invalid contactEmail";
-  }
+    if (
+      typeof eventDescription !== "string" ||
+      eventDescription.trim().length < 25
+    ) {
+      throw "Invalid eventDescription";
+    }
 
-  if (!isValidDate(eventDate)) {
-    throw "Invalid eventDate";
-  }
+    if (!isValidEmail(contactEmail)) {
+      throw "Invalid contactEmail";
+    }
 
-  if (!isValidTime(startTime)) {
-    throw "Invalid startTime";
-  }
+    if (!isValidDate(eventDate)) {
+      throw "Invalid eventDate";
+    }
 
-  if (!isValidTime(endTime)) {
-    throw "Invalid endTime";
-  }
+    if (!isValidTime(startTime)) {
+      throw "Invalid startTime";
+    }
 
-  const eventDateObj = new Date(eventDate);
-  const startTimeObj = new Date(`01/01/2000 ${startTime}`);
-  const endTimeObj = new Date(`01/01/2000 ${endTime}`);
+    if (!isValidTime(endTime)) {
+      throw "Invalid endTime";
+    }
 
-  if (eventDateObj <= new Date()) {
-    throw "EventDate must be in the future";
-  }
+    const eventDateObj = new Date(eventDate);
+    const startTimeObj = new Date(`01/01/2000 ${startTime}`);
+    const endTimeObj = new Date(`01/01/2000 ${endTime}`);
 
-  if (startTimeObj >= endTimeObj) {
-    throw "Invalid time range";
-  }
+    if (eventDateObj <= new Date()) {
+      throw "EventDate must be in the future";
+    }
 
-  const timeDifference = endTimeObj - startTimeObj;
-  if (timeDifference < 30 * 60 * 1000) {
-    throw "endTime should be at least 30 minutes later than startTime";
-  }
+    if (startTimeObj >= endTimeObj) {
+      throw "Invalid time range";
+    }
 
-  if (typeof publicEvent !== "boolean") {
-    throw "Invalid publicEvent";
-  }
+    const timeDifference = endTimeObj - startTimeObj;
+    if (timeDifference < 30 * 60 * 1000) {
+      throw "endTime should be at least 30 minutes later than startTime";
+    }
 
-  if (
-    typeof maxCapacity !== "number" ||
-    typeof priceOfAdmission !== "number" ||
-    maxCapacity <= 0 ||
-    priceOfAdmission < 0
+    if (typeof publicEvent !== "boolean") {
+      throw "Invalid publicEvent";
+    }
+
+    if (
+      typeof maxCapacity !== "number" ||
+      typeof priceOfAdmission !== "number" ||
+      maxCapacity <= 0 ||
+      priceOfAdmission < 0
+    ) {
+      throw "Invalid maxCapacity or priceOfAdmission";
+    }
+
+    if (typeof eventLocation !== "object") {
+      throw "Invalid eventLocation";
+    }
+
+    if (
+      typeof eventLocation.streetAddress !== "string" ||
+      eventLocation.streetAddress.trim().length < 3 ||
+      typeof eventLocation.city !== "string" ||
+      eventLocation.city.trim().length < 3 ||
+      typeof eventLocation.state !== "string" ||
+      !isValidState(eventLocation.state) ||
+      typeof eventLocation.zip !== "string" ||
+      !isValidZip(eventLocation.zip)
+    ) {
+      throw "Invalid eventLocation properties";
+    }
+
+    const newEvent = {
+      eventName: eventName,
+      description: eventDescription,
+      eventLocation: {
+        streetAddress: eventLocation.streetAddress,
+        city: eventLocation.city,
+        state: eventLocation.state,
+        zip: eventLocation.zip,
+      },
+      contactEmail: contactEmail,
+      maxCapacity: maxCapacity,
+      priceOfAdmission: priceOfAdmission,
+      eventDate: eventDate,
+      startTime: startTime.match(/^(?:[1-9]|1[0-2]):[0-5][0-9] [AP]M$/)[0],
+      endTime: endTime.match(/^(?:[1-9]|1[0-2]):[0-5][0-9] [AP]M$/)[0],
+      publicEvent: publicEvent,
+      attendees: [],
+      totalNumberOfAttendees: 0,
+    };
+
+    const eventCollection = await events();
+
+    const insertInfo = await eventCollection.insertOne(newEvent);
+    if (!insertInfo.acknowledged || !insertInfo.insertedId)
+      throw "Could not add Event";
+    const newId = insertInfo.insertedId.toString();
+
+    const event = await get(newId);
+    return event;
+  },
+
+  async getAll() {
+    const eventCollection = await events();
+    let eventList = await eventCollection.find({}).toArray();
+    if (!eventList) throw "Could not get all Events";
+    eventList = eventList.map((element) => ({
+      _id: element._id.toString(),
+      eventName: element.eventName,
+    }));
+    return eventList;
+  },
+
+  async get(eventId) {
+    if (!eventId) throw "You must provide an id to search for";
+    if (typeof eventId !== "string") throw "Id must be a string";
+    if (id.trim().length === 0)
+      throw "Id cannot be an empty string or just spaces";
+    eventId = eventId.trim();
+    if (!ObjectId.isValid(eventId)) throw "invalid object ID";
+    const eventCollection = await events();
+    const event = await eventCollection.findOne({ _id: new ObjectId(eventId) });
+    if (event === null) throw "No event with that id";
+    event._id = event._id.toString();
+    return event;
+  },
+
+  async remove(eventId) {
+    if (!eventId) throw "You must provide an id to search for";
+    if (typeof eventId !== "string") throw "Id must be a string";
+    if (eventId.trim().length === 0)
+      throw "id cannot be an empty string or just spaces";
+    eventId = eventId.trim();
+    if (!ObjectId.isValid(eventId)) throw "invalid object ID";
+    const eventCollection = await events();
+    const deletionInfo = await eventCollection.findOneAndDelete({
+      _id: new ObjectId(eventId),
+    });
+
+    if (!deletionInfo) {
+      throw `Could not delete event with id of ${eventId}`;
+    }
+
+    return {
+      eventName: deletionInfo.eventName,
+      deleted: true,
+    };
+  },
+
+  async update(
+    eventId,
+    eventName,
+    eventDescription,
+    eventLocation,
+    contactEmail,
+    maxCapacity,
+    priceOfAdmission,
+    eventDate,
+    startTime,
+    endTime,
+    publicEvent
   ) {
-    throw "Invalid maxCapacity or priceOfAdmission";
-  }
+    if (typeof eventName !== "string" || eventName.trim().length < 5) {
+      throw "Invalid eventName";
+    }
 
-  if (typeof eventLocation !== "object") {
-    throw "Invalid eventLocation";
-  }
+    if (
+      typeof eventDescription !== "string" ||
+      eventDescription.trim().length < 25
+    ) {
+      throw "Invalid eventDescription";
+    }
 
-  if (
-    typeof eventLocation.streetAddress !== "string" ||
-    eventLocation.streetAddress.trim().length < 3 ||
-    typeof eventLocation.city !== "string" ||
-    eventLocation.city.trim().length < 3 ||
-    typeof eventLocation.state !== "string" ||
-    !isValidState(eventLocation.state) ||
-    typeof eventLocation.zip !== "string" ||
-    !isValidZip(eventLocation.zip)
-  ) {
-    throw "Invalid eventLocation properties";
-  }
+    if (!isValidEmail(contactEmail)) {
+      throw "Invalid contactEmail";
+    }
 
-  const newEvent = {
-    eventName: eventName,
-    description: eventDescription,
-    eventLocation: {
-      streetAddress: eventLocation.streetAddress,
-      city: eventLocation.city,
-      state: eventLocation.state,
-      zip: eventLocation.zip,
-    },
-    contactEmail: contactEmail,
-    maxCapacity: maxCapacity,
-    priceOfAdmission: priceOfAdmission,
-    eventDate: eventDate,
-    startTime: startTime.match(/^(?:[1-9]|1[0-2]):[0-5][0-9] [AP]M$/)[0],
-    endTime: endTime.match(/^(?:[1-9]|1[0-2]):[0-5][0-9] [AP]M$/)[0],
-    publicEvent: publicEvent,
-    attendees: [],
-    totalNumberOfAttendees: 0,
-  };
+    if (!isValidDate(eventDate)) {
+      throw "Invalid eventDate";
+    }
 
-  const eventCollection = await events();
+    if (!isValidTime(startTime)) {
+      throw "Invalid startTime";
+    }
 
-  const insertInfo = await eventCollection.insertOne(newEvent);
-  if (!insertInfo.acknowledged || !insertInfo.insertedId)
-    throw "Could not add Event";
-  const newId = insertInfo.insertedId.toString();
+    if (!isValidTime(endTime)) {
+      throw "Invalid endTime";
+    }
 
-  const event = await get(newId);
-  return event;
+    const eventDateObj = new Date(eventDate);
+    const startTimeObj = new Date(`01/01/2000 ${startTime}`);
+    const endTimeObj = new Date(`01/01/2000 ${endTime}`);
+
+    if (eventDateObj <= new Date()) {
+      throw "EventDate must be in the future";
+    }
+
+    if (startTimeObj >= endTimeObj) {
+      throw "Invalid time range";
+    }
+
+    const timeDifference = endTimeObj - startTimeObj;
+    if (timeDifference < 30 * 60 * 1000) {
+      throw "endTime should be at least 30 minutes later than startTime";
+    }
+
+    if (typeof publicEvent !== "boolean") {
+      throw "Invalid publicEvent";
+    }
+
+    if (
+      typeof maxCapacity !== "number" ||
+      typeof priceOfAdmission !== "number" ||
+      maxCapacity <= 0 ||
+      priceOfAdmission < 0
+    ) {
+      throw "Invalid maxCapacity or priceOfAdmission";
+    }
+
+    if (typeof eventLocation !== "object") {
+      throw "Invalid eventLocation";
+    }
+
+    if (
+      typeof eventLocation.streetAddress !== "string" ||
+      eventLocation.streetAddress.trim().length < 3 ||
+      typeof eventLocation.city !== "string" ||
+      eventLocation.city.trim().length < 3 ||
+      typeof eventLocation.state !== "string" ||
+      !isValidState(eventLocation.state) ||
+      typeof eventLocation.zip !== "string" ||
+      !isValidZip(eventLocation.zip)
+    ) {
+      throw "Invalid eventLocation properties";
+    }
+
+    const newEvent = {
+      eventName: eventName,
+      description: eventDescription,
+      eventLocation: {
+        streetAddress: eventLocation.streetAddress,
+        city: eventLocation.city,
+        state: eventLocation.state,
+        zip: eventLocation.zip,
+      },
+      contactEmail: contactEmail,
+      maxCapacity: maxCapacity,
+      priceOfAdmission: priceOfAdmission,
+      eventDate: eventDate,
+      startTime: startTime,
+      endTime: endTime,
+      publicEvent: publicEvent,
+    };
+
+    const eventCollection = await events();
+
+    const insertInfo = await eventCollection.insertOne(newEvent);
+    if (!insertInfo.acknowledged || !insertInfo.insertedId)
+      throw "Could not add Event";
+    const newId = insertInfo.insertedId.toString();
+
+    const event = await get(newId);
+    return event;
+  },
 };
 
-const getAll = async () => {
-  const eventCollection = await events();
-  let eventList = await eventCollection.find({}).toArray();
-  if (!eventList) throw "Could not get all Events";
-  eventList = eventList.map((element) => ({
-    _id: element._id.toString(),
-    eventName: element.eventName,
-  }));
-  return eventList;
-};
-
-const get = async (eventId) => {
-  if (!eventId) throw "You must provide an id to search for";
-  if (typeof eventId !== "string") throw "Id must be a string";
-  if (id.trim().length === 0)
-    throw "Id cannot be an empty string or just spaces";
-  eventId = eventId.trim();
-  if (!ObjectId.isValid(eventId)) throw "invalid object ID";
-  const eventCollection = await events();
-  const event = await eventCollection.findOne({ _id: new ObjectId(eventId) });
-  if (event === null) throw "No event with that id";
-  event._id = event._id.toString();
-  return event;
-};
-
-const remove = async (eventId) => {
-  if (!eventId) throw "You must provide an id to search for";
-  if (typeof eventId !== "string") throw "Id must be a string";
-  if (eventId.trim().length === 0)
-    throw "id cannot be an empty string or just spaces";
-  eventId = eventId.trim();
-  if (!ObjectId.isValid(eventId)) throw "invalid object ID";
-  const eventCollection = await events();
-  const deletionInfo = await eventCollection.findOneAndDelete({
-    _id: new ObjectId(eventId),
-  });
-
-  if (!deletionInfo) {
-    throw `Could not delete event with id of ${eventId}`;
-  }
-
-  return {
-    eventName: deletionInfo.eventName,
-    deleted: true,
-  };
-};
-
-const update = async (
-  eventId,
-  eventName,
-  eventDescription,
-  eventLocation,
-  contactEmail,
-  maxCapacity,
-  priceOfAdmission,
-  eventDate,
-  startTime,
-  endTime,
-  publicEvent
-) => {
-  if (typeof eventName !== "string" || eventName.trim().length < 5) {
-    throw "Invalid eventName";
-  }
-
-  if (
-    typeof eventDescription !== "string" ||
-    eventDescription.trim().length < 25
-  ) {
-    throw "Invalid eventDescription";
-  }
-
-  if (!isValidEmail(contactEmail)) {
-    throw "Invalid contactEmail";
-  }
-
-  if (!isValidDate(eventDate)) {
-    throw "Invalid eventDate";
-  }
-
-  if (!isValidTime(startTime)) {
-    throw "Invalid startTime";
-  }
-
-  if (!isValidTime(endTime)) {
-    throw "Invalid endTime";
-  }
-
-  const eventDateObj = new Date(eventDate);
-  const startTimeObj = new Date(`01/01/2000 ${startTime}`);
-  const endTimeObj = new Date(`01/01/2000 ${endTime}`);
-
-  if (eventDateObj <= new Date()) {
-    throw "EventDate must be in the future";
-  }
-
-  if (startTimeObj >= endTimeObj) {
-    throw "Invalid time range";
-  }
-
-  const timeDifference = endTimeObj - startTimeObj;
-  if (timeDifference < 30 * 60 * 1000) {
-    throw "endTime should be at least 30 minutes later than startTime";
-  }
-
-  if (typeof publicEvent !== "boolean") {
-    throw "Invalid publicEvent";
-  }
-
-  if (
-    typeof maxCapacity !== "number" ||
-    typeof priceOfAdmission !== "number" ||
-    maxCapacity <= 0 ||
-    priceOfAdmission < 0
-  ) {
-    throw "Invalid maxCapacity or priceOfAdmission";
-  }
-
-  if (typeof eventLocation !== "object") {
-    throw "Invalid eventLocation";
-  }
-
-  if (
-    typeof eventLocation.streetAddress !== "string" ||
-    eventLocation.streetAddress.trim().length < 3 ||
-    typeof eventLocation.city !== "string" ||
-    eventLocation.city.trim().length < 3 ||
-    typeof eventLocation.state !== "string" ||
-    !isValidState(eventLocation.state) ||
-    typeof eventLocation.zip !== "string" ||
-    !isValidZip(eventLocation.zip)
-  ) {
-    throw "Invalid eventLocation properties";
-  }
-
-  const newEvent = {
-    eventName: eventName,
-    description: eventDescription,
-    eventLocation: {
-      streetAddress: eventLocation.streetAddress,
-      city: eventLocation.city,
-      state: eventLocation.state,
-      zip: eventLocation.zip,
-    },
-    contactEmail: contactEmail,
-    maxCapacity: maxCapacity,
-    priceOfAdmission: priceOfAdmission,
-    eventDate: eventDate,
-    startTime: startTime,
-    endTime: endTime,
-    publicEvent: publicEvent,
-  };
-
-  const eventCollection = await events();
-
-  const insertInfo = await eventCollection.insertOne(newEvent);
-  if (!insertInfo.acknowledged || !insertInfo.insertedId)
-    throw "Could not add Event";
-  const newId = insertInfo.insertedId.toString();
-
-  const event = await get(newId);
-  return event;
-};
-
-export { create, getAll, get, remove, update };
+export default exportedMethods;
