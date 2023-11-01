@@ -14,7 +14,7 @@ import {
 // import validation from '../validation.js';
 
 router
-  .route("/events")
+  .route("/")
   .get(async (req, res) => {
     try {
       const eventList = await eventData.getAll();
