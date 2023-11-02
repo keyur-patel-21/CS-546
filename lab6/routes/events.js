@@ -24,9 +24,9 @@ router
     }
   })
   .post(async (req, res) => {
-    const eventData = req.body;
+    const neweventData = req.body;
     //make sure there is something present in the req.body
-    if (!eventData || Object.keys(eventData).length === 0) {
+    if (!neweventData || Object.keys(neweventData).length === 0) {
       return res
         .status(400)
         .json({ error: "There are no fields in the request body" });
@@ -34,67 +34,67 @@ router
 
     try {
       if (
-        !eventData.eventName ||
-        typeof eventData.eventName !== "string" ||
-        eventData.eventName.trim().length < 5
+        !neweventData.eventName ||
+        typeof neweventData.eventName !== "string" ||
+        neweventData.eventName.trim().length < 5
       ) {
         throw "Invalid or missing eventName";
       }
-      eventData.eventName = eventData.eventName.trim();
+      neweventData.eventName = neweventData.eventName.trim();
 
       if (
-        !eventData.eventDescription ||
-        typeof eventData.eventDescription !== "string" ||
-        eventData.eventDescription.trim().length < 25
+        !neweventData.eventDescription ||
+        typeof neweventData.eventDescription !== "string" ||
+        neweventData.eventDescription.trim().length < 25
       ) {
         throw "Invalid or missing eventDescription";
       }
-      eventData.eventDescription = eventData.eventDescription.trim();
+      neweventData.eventDescription = neweventData.eventDescription.trim();
 
       if (
-        !eventData.contactEmail ||
-        typeof eventData.contactEmail !== "string" ||
-        !isValidEmail(eventData.contactEmail.trim())
+        !neweventData.contactEmail ||
+        typeof neweventData.contactEmail !== "string" ||
+        !isValidEmail(neweventData.contactEmail.trim())
       ) {
         throw "Invalid or missing contactEmail";
       }
-      eventData.contactEmail = eventData.contactEmail.trim();
+      neweventData.contactEmail = neweventData.contactEmail.trim();
 
       if (
-        !eventData.eventDate ||
-        typeof eventData.eventDate !== "string" ||
-        !isValidDate(eventData.eventDate)
+        !neweventData.eventDate ||
+        typeof neweventData.eventDate !== "string" ||
+        !isValidDate(neweventData.eventDate)
       ) {
         throw "Invalid or missing eventDate";
       }
-      eventData.eventDate = eventData.eventDate.trim();
+      neweventData.eventDate = neweventData.eventDate.trim();
 
-      const eventDate = new Date(eventData.eventDate);
+      const eventDate = new Date(neweventData.eventDate);
 
       if (eventDate <= new Date()) {
         throw "Event date must be in the future";
       }
 
       if (
-        !eventData.startTime ||
-        typeof eventData.startTime !== "string" ||
-        !isValidTime(eventData.startTime)
+        !neweventData.startTime ||
+        typeof neweventData.startTime !== "string" ||
+        !isValidTime(neweventData.startTime)
       ) {
         throw "Invalid or missing startTime";
       }
-      eventData.startTime = eventData.startTime.trim();
+      neweventData.startTime = neweventData.startTime.trim();
 
       if (
-        !eventData.endTime ||
-        typeof eventData.endTime !== "string" ||
-        !isValidTime(eventData.endTime)
+        !neweventData.endTime ||
+        typeof neweventData.endTime !== "string" ||
+        !isValidTime(neweventData.endTime)
       ) {
         throw "Invalid or missing endTime";
       }
-      eventData.endTime = eventData.endTime.trim();
+      neweventData.endTime = neweventData.endTime.trim();
 
-      const startTime = new Date(`2000-01-01 ${eventData.startTime}`);
-      const endTime = new Date(`2000-01-01 ${eventData.endTime}`);
+      const startTime = new Date(`2000-01-01 ${neweventData.startTime}`);
+      const endTime = new Date(`2000-01-01 ${neweventData.endTime}`);
 
       if (startTime >= endTime) {
         throw "Start time must be earlier than end time";
@@ -104,48 +104,48 @@ router
         throw "End time should be at least 30 minutes later than start time";
       }
 
-      if (typeof eventData.publicEvent !== "boolean") {
+      if (typeof neweventData.publicEvent !== "boolean") {
         throw "Invalid or missing publicEvent";
       }
 
       if (
-        eventData.maxCapacity === undefined ||
-        typeof eventData.maxCapacity !== "number" ||
-        eventData.maxCapacity <= 0
+        neweventData.maxCapacity === undefined ||
+        typeof neweventData.maxCapacity !== "number" ||
+        neweventData.maxCapacity <= 0
       ) {
         throw "Invalid or missing maxCapacity";
       }
 
       if (
-        eventData.priceOfAdmission === undefined ||
-        (typeof eventData.priceOfAdmission !== "number" &&
-          typeof eventData.priceOfAdmission !== "string") ||
-        parseFloat(eventData.priceOfAdmission) < 0
+        neweventData.priceOfAdmission === undefined ||
+        (typeof neweventData.priceOfAdmission !== "number" &&
+          typeof neweventData.priceOfAdmission !== "string") ||
+        parseFloat(neweventData.priceOfAdmission) < 0
       ) {
         throw "Invalid or missing priceOfAdmission";
       }
 
-      eventData.maxCapacity = parseInt(eventData.maxCapacity);
+      neweventData.maxCapacity = parseInt(neweventData.maxCapacity);
 
-      if (typeof eventData.eventLocation !== "object") {
+      if (typeof neweventData.eventLocation !== "object") {
         throw "Invalid eventLocation";
       }
 
       if (
-        typeof eventData.eventLocation.streetAddress !== "string" ||
-        eventData.eventLocation.streetAddress.trim().length < 3 ||
-        typeof eventData.eventLocation.city !== "string" ||
-        eventData.eventLocation.city.trim().length < 3 ||
-        typeof eventData.eventLocation.state !== "string" ||
-        !isValidState(eventData.eventLocation.state) ||
-        typeof eventData.eventLocation.zip !== "string" ||
-        !isValidZip(eventData.eventLocation.zip)
+        typeof neweventData.eventLocation.streetAddress !== "string" ||
+        neweventData.eventLocation.streetAddress.trim().length < 3 ||
+        typeof neweventData.eventLocation.city !== "string" ||
+        neweventData.eventLocation.city.trim().length < 3 ||
+        typeof neweventData.eventLocation.state !== "string" ||
+        !isValidState(neweventData.eventLocation.state) ||
+        typeof neweventData.eventLocation.zip !== "string" ||
+        !isValidZip(neweventData.eventLocation.zip)
       ) {
         throw "Invalid eventLocation properties";
       }
-      eventData.eventLocation.streetAddress = eventData.eventLocation.streetAddress.trim();
-      eventData.eventLocation.city = eventData.eventLocation.city.trim();
-      eventData.eventLocation.state = eventData.eventLocation.state.trim();
+      neweventData.eventLocation.streetAddress = neweventData.eventLocation.streetAddress.trim();
+      neweventData.eventLocation.city = neweventData.eventLocation.city.trim();
+      neweventData.eventLocation.state = neweventData.eventLocation.state.trim();
 
     } catch (e) {
       return res.status(400).json({ error: e });
@@ -163,7 +163,7 @@ router
         startTime,
         endTime,
         publicEvent,
-      } = eventData;
+      } = neweventData;
       const newEvent = await eventData.create(
         eventName,
         eventDescription,
