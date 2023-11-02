@@ -143,10 +143,11 @@ router
       ) {
         throw "Invalid eventLocation properties";
       }
-      neweventData.eventLocation.streetAddress = neweventData.eventLocation.streetAddress.trim();
+      neweventData.eventLocation.streetAddress =
+        neweventData.eventLocation.streetAddress.trim();
       neweventData.eventLocation.city = neweventData.eventLocation.city.trim();
-      neweventData.eventLocation.state = neweventData.eventLocation.state.trim();
-
+      neweventData.eventLocation.state =
+        neweventData.eventLocation.state.trim();
     } catch (e) {
       return res.status(400).json({ error: e });
     }

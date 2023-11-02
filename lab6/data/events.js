@@ -109,8 +109,8 @@ const exportedMethods = {
       maxCapacity: maxCapacity,
       priceOfAdmission: priceOfAdmission,
       eventDate: eventDate,
-      startTime: startTime.match(/^(?:[1-9]|1[0-2]):[0-5][0-9] [AP]M$/)[0],
-      endTime: endTime.match(/^(?:[1-9]|1[0-2]):[0-5][0-9] [AP]M$/)[0],
+      startTime: startTime,
+      endTime: endTime,
       publicEvent: publicEvent,
       attendees: [],
       totalNumberOfAttendees: 0,
@@ -123,7 +123,7 @@ const exportedMethods = {
       throw "Could not add Event";
     const newId = insertInfo.insertedId.toString();
 
-    const event = await get(newId);
+    const event = await this.get(newId);
     return event;
   },
 
@@ -141,7 +141,7 @@ const exportedMethods = {
   async get(eventId) {
     if (!eventId) throw "You must provide an id to search for";
     if (typeof eventId !== "string") throw "Id must be a string";
-    if (id.trim().length === 0)
+    if (eventId.trim().length === 0)
       throw "Id cannot be an empty string or just spaces";
     eventId = eventId.trim();
     if (!ObjectId.isValid(eventId)) throw "invalid object ID";
