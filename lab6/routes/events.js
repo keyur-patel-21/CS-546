@@ -24,18 +24,15 @@ router
     }
   })
   .post(async (req, res) => {
-    //code here for POST
     const eventData = req.body;
-
-    // Ensure the request body is not empty
+    //make sure there is something present in the req.body
     if (!eventData || Object.keys(eventData).length === 0) {
       return res
         .status(400)
-        .json({ error: "All fields need to have valid values" });
+        .json({ error: "There are no fields in the request body" });
     }
 
     try {
-      // Validate eventName
       if (
         !eventData.eventName ||
         typeof eventData.eventName !== "string" ||
@@ -43,8 +40,8 @@ router
       ) {
         throw "Invalid or missing eventName";
       }
+      eventData.eventName = eventData.eventName.trim();
 
-      // Validate eventDescription
       if (
         !eventData.eventDescription ||
         typeof eventData.eventDescription !== "string" ||
@@ -52,18 +49,17 @@ router
       ) {
         throw "Invalid or missing eventDescription";
       }
+      eventData.eventDescription = eventData.eventDescription.trim();
 
-      // Validate contactEmail
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (
         !eventData.contactEmail ||
         typeof eventData.contactEmail !== "string" ||
-        !emailRegex.test(eventData.contactEmail.trim())
+        !isValidEmail(eventData.contactEmail.trim())
       ) {
         throw "Invalid or missing contactEmail";
       }
+      eventData.contactEmail = eventData.contactEmail.trim();
 
-      // Validate eventDate
       if (
         !eventData.eventDate ||
         typeof eventData.eventDate !== "string" ||
@@ -71,55 +67,47 @@ router
       ) {
         throw "Invalid or missing eventDate";
       }
+      eventData.eventDate = eventData.eventDate.trim();
 
-      // Convert eventDate to a Date object for comparison
       const eventDate = new Date(eventData.eventDate);
 
-      // Check if eventDate is in the future
       if (eventDate <= new Date()) {
         throw "Event date must be in the future";
       }
 
-      // Validate startTime
-      const startTimeRegex = /^(0?[1-9]|1[0-2]):[0-5][0-9] [APap][mM]$/;
       if (
         !eventData.startTime ||
         typeof eventData.startTime !== "string" ||
-        !startTimeRegex.test(eventData.startTime)
+        !isValidTime(eventData.startTime)
       ) {
         throw "Invalid or missing startTime";
       }
+      eventData.startTime = eventData.startTime.trim();
 
-      // Validate endTime
-      const endTimeRegex = /^(0?[1-9]|1[0-2]):[0-5][0-9] [APap][mM]$/;
       if (
         !eventData.endTime ||
         typeof eventData.endTime !== "string" ||
-        !endTimeRegex.test(eventData.endTime)
+        !isValidTime(eventData.endTime)
       ) {
         throw "Invalid or missing endTime";
       }
+      eventData.endTime = eventData.endTime.trim();
 
-      // Convert startTime and endTime to Date objects for comparison
       const startTime = new Date(`2000-01-01 ${eventData.startTime}`);
       const endTime = new Date(`2000-01-01 ${eventData.endTime}`);
 
-      // Check if startTime is earlier than endTime
       if (startTime >= endTime) {
         throw "Start time must be earlier than end time";
       }
 
-      // Check if endTime is at least 30 minutes later than startTime
       if (endTime - startTime < 30 * 60 * 1000) {
         throw "End time should be at least 30 minutes later than start time";
       }
 
-      // Validate publicEvent
       if (typeof eventData.publicEvent !== "boolean") {
         throw "Invalid or missing publicEvent";
       }
 
-      // Validate maxCapacity
       if (
         eventData.maxCapacity === undefined ||
         typeof eventData.maxCapacity !== "number" ||
@@ -128,7 +116,6 @@ router
         throw "Invalid or missing maxCapacity";
       }
 
-      // Validate priceOfAdmission
       if (
         eventData.priceOfAdmission === undefined ||
         (typeof eventData.priceOfAdmission !== "number" &&
@@ -138,7 +125,6 @@ router
         throw "Invalid or missing priceOfAdmission";
       }
 
-      // Convert maxCapacity to an integer
       eventData.maxCapacity = parseInt(eventData.maxCapacity);
 
       if (typeof eventData.eventLocation !== "object") {
@@ -157,33 +143,42 @@ router
       ) {
         throw "Invalid eventLocation properties";
       }
+      eventData.eventLocation.streetAddress = eventData.eventLocation.streetAddress.trim();
+      eventData.eventLocation.city = eventData.eventLocation.city.trim();
+      eventData.eventLocation.state = eventData.eventLocation.state.trim();
 
-      // Create the event object
-      const newEvent = {
-        eventName: eventData.eventName,
-        eventDescription: eventData.eventDescription,
-        eventLocation: {
-          streetAddress: eventData.eventLocation.streetAddress,
-          city: eventData.eventLocation.city,
-          state: eventData.eventLocation.state,
-          zip: eventData.eventLocation.zip,
-        },
-        contactEmail: eventData.contactEmail.trim(),
-        maxCapacity: eventData.maxCapacity,
-        priceOfAdmission: parseFloat(eventData.priceOfAdmission),
-        eventDate: eventData.eventDate,
-        startTime: eventData.startTime,
-        endTime: eventData.endTime,
-        publicEvent: eventData.publicEvent,
-        attendees: [],
-        totalNumberOfAttendees: 0,
-      };
+    } catch (e) {
+      return res.status(400).json({ error: e });
+    }
 
-      // Return the newly created event with a 200 status code
-      res.status(200).json(newEvent);
-    } catch (error) {
-      // Handle validation errors with a 400 status code
-      res.status(400).json({ error });
+    try {
+      const {
+        eventName,
+        eventDescription,
+        eventLocation,
+        contactEmail,
+        maxCapacity,
+        priceOfAdmission,
+        eventDate,
+        startTime,
+        endTime,
+        publicEvent,
+      } = eventData;
+      const newEvent = await eventData.create(
+        eventName,
+        eventDescription,
+        eventLocation,
+        contactEmail,
+        maxCapacity,
+        priceOfAdmission,
+        eventDate,
+        startTime,
+        endTime,
+        publicEvent
+      );
+      res.json(newEvent);
+    } catch (e) {
+      res.status(500).json({ error: e });
     }
   });
 
