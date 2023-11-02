@@ -176,7 +176,7 @@ const exportedMethods = {
   },
 
   async update(id, updatedEvent) {
-    id = validation.checkId(id);
+    id = checkId(id);
     if (typeof updatedEvent.eventName !== "string" || updatedEvent.eventName.trim().length < 5) {
       throw "Invalid eventName";
     }
@@ -273,7 +273,7 @@ const exportedMethods = {
 
     const updateInfo  = await eventCollection.findOneAndReplace(
       {_id: new ObjectId(id)},
-      updatedEventData,
+      updatedEvent,
       {returnDocument: 'after'}
     );
     if (!updateInfo)

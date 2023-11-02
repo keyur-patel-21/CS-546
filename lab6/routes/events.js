@@ -285,7 +285,7 @@ router
       ) {
         throw "Invalid or missing endTime";
       }
-      updatedeventData.endTime = neweventData.endTime.trim();
+      updatedeventData.endTime = updatedeventData.endTime.trim();
 
       const startTime = new Date(`2000-01-01 ${updatedeventData.startTime}`);
       const endTime = new Date(`2000-01-01 ${updatedeventData.endTime}`);
@@ -343,7 +343,7 @@ router
       updatedeventData.eventLocation.state =
       updatedeventData.eventLocation.state.trim();
     } catch (e) {
-      return res.status(400).json({ error: e });
+      return res.status(400).json({ error: e.message });
     }
 
     try {
@@ -353,7 +353,7 @@ router
       );
       res.json(updatedEvent);
     } catch (e) {
-      res.status(404).json({error: e});
+      res.status(404).json({error: e.message});
     }
 
   });
