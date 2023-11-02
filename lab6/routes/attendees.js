@@ -102,6 +102,18 @@ router
   })
   .delete(async (req, res) => {
     //code here for DELETE
+    try {
+      req.params.eventId = checkId(req.params.attendeeId, "Id URL Param");
+    } catch (e) {
+      return res.status(400).json({ error: e });
+    }
+
+    try {
+      const attendee = await attendeeData.removeAttendee(req.params.attendeeId);
+      res.json(attendee);
+    } catch (e) {
+      res.status(404).json({ error: e.message });
+    }
   });
 
 export default router;
