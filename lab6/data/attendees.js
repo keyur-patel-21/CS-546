@@ -61,7 +61,7 @@ const exportedMethods = {
       // Use $push to add a new attendee to the event's attendees array
       // and $inc to increment the totalNumberOfAttendees field by 1.
       await eventCollection.updateOne(
-        { _id: eventId },
+        { _id: new ObjectId(eventId) },
         {
           $push: { attendees: newAttendee },
           $inc: { totalNumberOfAttendees: 1 },
