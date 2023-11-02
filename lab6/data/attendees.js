@@ -1,6 +1,7 @@
 // This data file should export all functions using the ES6 standard as shown in the lecture code
 import { events } from "../config/mongoCollections.js";
 import { ObjectId } from "mongodb";
+import eventDataFunctions from './events.js';
 
 const exportedMethods = {
   async createAttendee(eventId, firstName, lastName, emailAddress) {
@@ -25,7 +26,7 @@ const exportedMethods = {
       throw "Invalid eventId";
     }
 
-    const event = await events.getEventById(eventId);
+    const event = await eventDataFunctions.get(eventId);
     if (!event) {
       throw "Event not found";
     }
@@ -55,9 +56,9 @@ const exportedMethods = {
 
     event.attendees.push(newAttendee);
 
-    event.totalNumberOfAttendees = event.attendees.length;
+    event.totalNumberOfAttendees = event.totalNumberOfAttendees + 1;
 
-    await events.updateEvent(event);
+    // await eventDataFunctions.update(event);
 
     return newAttendee;
   },
