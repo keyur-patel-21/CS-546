@@ -67,7 +67,6 @@ const exportedMethods = {
           $inc: { totalNumberOfAttendees: 1 },
         }
       );
-    
 
       // Return the updated event.
       return await eventDataFunctions.get(eventId);
@@ -109,24 +108,36 @@ const exportedMethods = {
 
   async getAttendee(attendeeId) {
     if (!attendeeId) {
-      throw "attendeeId is required";
+      throw "attendeeId is required.";
     }
 
     attendeeId = attendeeId.trim();
 
     if (!ObjectId.isValid(attendeeId)) {
-      throw "Invalid ObjectId format for attendeeId";
+      throw "Invalid ObjectId format for attendeeId.";
     }
 
-    const attendee = await events.findOne({ _id: ObjectId(attendeeId) });
+    const eventCollection = await events();
+
+    const event = await eventCollection.findOne({
+      "attendees._id": new ObjectId(attendeeId),
+    });
+
+    if (!event) {
+      throw "Attendee not found.";
+    }
+
+    // Find the attendee within the event's attendees array
+    const attendee = event.attendees.find((a) =>
+      a._id.equals(new ObjectId(attendeeId))
+    );
 
     if (!attendee) {
-      throw "Attendee not found";
+      throw "Attendee not found.";
     }
 
     return attendee;
   },
-
   async removeAttendee(attendeeId) {
     if (!attendeeId) {
       throw "attendeeId is required";
