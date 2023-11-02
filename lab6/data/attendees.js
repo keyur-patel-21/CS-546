@@ -149,8 +149,10 @@ const exportedMethods = {
       throw "Invalid ObjectId format for attendeeId";
     }
 
-    const event = await events.findOne({
-      "attendees._id": ObjectId(attendeeId),
+    const eventCollection = await events();
+
+    const event = await eventCollection.findOne({
+      "attendees._id": new ObjectId(attendeeId),
     });
 
     if (!event) {
@@ -158,14 +160,15 @@ const exportedMethods = {
     }
 
     const attendeeIndex = event.attendees.findIndex((attendee) =>
-      attendee._id.equals(ObjectId(attendeeId))
+      attendee._id.equals(new ObjectId(attendeeId))
     );
 
     event.attendees.splice(attendeeIndex, 1);
 
     event.totalNumberOfAttendees = event.attendees.length;
 
-    await events.updateOne({ _id: event._id }, { $set: event });
+    // Corrected update operation using updateOne
+    await eventCollection.updateOne({ _id: event._id }, { $set: event });
 
     return event;
   },
