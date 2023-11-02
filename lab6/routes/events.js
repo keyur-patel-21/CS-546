@@ -11,7 +11,6 @@ import {
   isValidZip,
   checkId,
 } from "../helpers.js";
-// import validation from '../validation.js';
 
 router
   .route("/")

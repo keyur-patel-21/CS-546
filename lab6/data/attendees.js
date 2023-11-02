@@ -58,8 +58,6 @@ const exportedMethods = {
 
       const eventCollection = await events();
 
-      // Use $push to add a new attendee to the event's attendees array
-      // and $inc to increment the totalNumberOfAttendees field by 1.
       await eventCollection.updateOne(
         { _id: new ObjectId(eventId) },
         {
@@ -68,7 +66,6 @@ const exportedMethods = {
         }
       );
 
-      // Return the updated event.
       return await eventDataFunctions.get(eventId);
     } catch (error) {
       console.error("Error updating event in MongoDB:", error);
@@ -127,7 +124,6 @@ const exportedMethods = {
       throw "Attendee not found.";
     }
 
-    // Find the attendee within the event's attendees array
     const attendee = event.attendees.find((a) =>
       a._id.equals(new ObjectId(attendeeId))
     );
@@ -167,7 +163,6 @@ const exportedMethods = {
 
     event.totalNumberOfAttendees = event.attendees.length;
 
-    // Corrected update operation using updateOne
     await eventCollection.updateOne({ _id: event._id }, { $set: event });
 
     return event;
