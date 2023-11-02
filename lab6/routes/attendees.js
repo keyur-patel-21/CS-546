@@ -87,6 +87,18 @@ router
   .route("/attendee/:attendeeId")
   .get(async (req, res) => {
     //code here for GET
+    try {
+      req.params.eventId = checkId(req.params.attendeeId, "Id URL Param");
+    } catch (e) {
+      return res.status(400).json({ error: e });
+    }
+
+    try {
+      const attendee = await attendeeData.getAttendee(req.params.attendeeId);
+      res.json(attendee);
+    } catch (e) {
+      res.status(404).json({ error: e.message });
+    }
   })
   .delete(async (req, res) => {
     //code here for DELETE
