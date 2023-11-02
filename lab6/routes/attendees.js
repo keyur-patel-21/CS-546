@@ -16,6 +16,18 @@ router
   .route("/:eventId")
   .get(async (req, res) => {
     //code here for GET
+    try {
+      req.params.eventId = checkId(req.params.eventId, "Id URL Param");
+    } catch (e) {
+      return res.status(400).json({ error: e });
+    }
+
+    try {
+      const event = await eventData.get(req.params.eventId);
+      res.json(event.attendees);
+    } catch (e) {
+      res.status(404).json({ error: e });
+    }
   })
   .post(async (req, res) => {
     //code here for POST
