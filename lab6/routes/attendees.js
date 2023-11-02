@@ -62,7 +62,6 @@ router
         throw "Invalid or missing emailAddress";
       }
       newattendeeData.emailAddress = newattendeeData.emailAddress.trim();
-      console.log(newattendeeData);
     } catch (e) {
       console.log(e);
       return res.status(400).json({ error: e.message });

@@ -40,7 +40,7 @@ const exportedMethods = {
       throw "Event is already full";
     }
 
-    if (event.attendees ) {
+    if (event.attendees) {
       const existingAttendee = event.attendees.find(
         (attendee) => attendee.emailAddress === emailAddress
       );
@@ -48,21 +48,33 @@ const exportedMethods = {
         throw "An attendee with this email already exists";
       }
     }
+    try {
+      const newAttendee = {
+        _id: new ObjectId(),
+        firstName: firstName,
+        lastName: lastName,
+        emailAddress: emailAddress,
+      };
 
-    const newAttendee = {
-      _id: new ObjectId(),
-      firstName: firstName,
-      lastName: lastName,
-      emailAddress: emailAddress,
-    };
+      const eventCollection = await events();
 
-    event.attendees.push(newAttendee);
+      // Use $push to add a new attendee to the event's attendees array
+      // and $inc to increment the totalNumberOfAttendees field by 1.
+      await eventCollection.updateOne(
+        { _id: eventId },
+        {
+          $push: { attendees: newAttendee },
+          $inc: { totalNumberOfAttendees: 1 },
+        }
+      );
+    
 
-    event.totalNumberOfAttendees = event.totalNumberOfAttendees + 1;
-
-    // await eventDataFunctions.update(event);
-
-    return event;
+      // Return the updated event.
+      return await eventDataFunctions.get(eventId);
+    } catch (error) {
+      console.error("Error updating event in MongoDB:", error);
+      throw "Failed to update event";
+    }
   },
 
   async getAllAttendees(eventId) {
