@@ -92,8 +92,9 @@ const exportedMethods = {
     } catch (err) {
       throw "Invalid Event ID. It should be a valid ObjectId.";
     }
+    const eventCollection = await events();
 
-    const event = await events.findOne({ _id: eventObjectId });
+    const event = await eventCollection.findOne({ _id: eventObjectId });
 
     if (!event) {
       throw "Event not found with the provided Event ID.";

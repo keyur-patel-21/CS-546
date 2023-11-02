@@ -23,10 +23,10 @@ router
     }
 
     try {
-      const event = await attendeeData.get(req.params.eventId);
-      res.json(event.attendees);
+      const attendee = await attendeeData.getAllAttendees(req.params.eventId);
+      res.json(attendee);
     } catch (e) {
-      res.status(404).json({ error: e });
+      res.status(404).json({ error: e.message });
     }
   })
   .post(async (req, res) => {
