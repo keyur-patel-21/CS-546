@@ -7,6 +7,7 @@ import {
   isValidTime,
   isValidState,
   isValidZip,
+  checkId,
 } from "../helpers.js";
 
 const exportedMethods = {
@@ -174,49 +175,38 @@ const exportedMethods = {
     };
   },
 
-  async update(
-    eventId,
-    eventName,
-    eventDescription,
-    eventLocation,
-    contactEmail,
-    maxCapacity,
-    priceOfAdmission,
-    eventDate,
-    startTime,
-    endTime,
-    publicEvent
-  ) {
-    if (typeof eventName !== "string" || eventName.trim().length < 5) {
+  async update(id, updatedEvent) {
+    id = validation.checkId(id);
+    if (typeof updatedEvent.eventName !== "string" || updatedEvent.eventName.trim().length < 5) {
       throw "Invalid eventName";
     }
 
     if (
-      typeof eventDescription !== "string" ||
-      eventDescription.trim().length < 25
+      typeof updatedEvent.eventDescription !== "string" ||
+      updatedEvent.eventDescription.trim().length < 25
     ) {
       throw "Invalid eventDescription";
     }
 
-    if (!isValidEmail(contactEmail)) {
+    if (!isValidEmail(updatedEvent.contactEmail)) {
       throw "Invalid contactEmail";
     }
 
-    if (!isValidDate(eventDate)) {
+    if (!isValidDate(updatedEvent.eventDate)) {
       throw "Invalid eventDate";
     }
 
-    if (!isValidTime(startTime)) {
+    if (!isValidTime(updatedEvent.startTime)) {
       throw "Invalid startTime";
     }
 
-    if (!isValidTime(endTime)) {
+    if (!isValidTime(updatedEvent.endTime)) {
       throw "Invalid endTime";
     }
 
-    const eventDateObj = new Date(eventDate);
-    const startTimeObj = new Date(`01/01/2000 ${startTime}`);
-    const endTimeObj = new Date(`01/01/2000 ${endTime}`);
+    const eventDateObj = new Date(updatedEvent.eventDate);
+    const startTimeObj = new Date(`01/01/2000 ${updatedEvent.startTime}`);
+    const endTimeObj = new Date(`01/01/2000 ${updatedEvent.endTime}`);
 
     if (eventDateObj <= new Date()) {
       throw "EventDate must be in the future";
@@ -231,63 +221,64 @@ const exportedMethods = {
       throw "endTime should be at least 30 minutes later than startTime";
     }
 
-    if (typeof publicEvent !== "boolean") {
+    if (typeof updatedEvent.publicEvent !== "boolean") {
       throw "Invalid publicEvent";
     }
 
     if (
-      typeof maxCapacity !== "number" ||
-      typeof priceOfAdmission !== "number" ||
-      maxCapacity <= 0 ||
-      priceOfAdmission < 0
+      typeof updatedEvent.maxCapacity !== "number" ||
+      typeof updatedEvent.priceOfAdmission !== "number" ||
+      updatedEvent.maxCapacity <= 0 ||
+      updatedEvent.priceOfAdmission < 0
     ) {
       throw "Invalid maxCapacity or priceOfAdmission";
     }
 
-    if (typeof eventLocation !== "object") {
+    if (typeof updatedEvent.eventLocation !== "object") {
       throw "Invalid eventLocation";
     }
 
     if (
-      typeof eventLocation.streetAddress !== "string" ||
-      eventLocation.streetAddress.trim().length < 3 ||
-      typeof eventLocation.city !== "string" ||
-      eventLocation.city.trim().length < 3 ||
-      typeof eventLocation.state !== "string" ||
-      !isValidState(eventLocation.state) ||
-      typeof eventLocation.zip !== "string" ||
-      !isValidZip(eventLocation.zip)
+      typeof updatedEvent.eventLocation.streetAddress !== "string" ||
+      updatedEvent.eventLocation.streetAddress.trim().length < 3 ||
+      typeof updatedEvent.eventLocation.city !== "string" ||
+      updatedEvent.eventLocation.city.trim().length < 3 ||
+      typeof updatedEvent.eventLocation.state !== "string" ||
+      !isValidState(updatedEvent.eventLocation.state) ||
+      typeof updatedEvent.eventLocation.zip !== "string" ||
+      !isValidZip(updatedEvent.eventLocation.zip)
     ) {
       throw "Invalid eventLocation properties";
     }
 
-    const newEvent = {
-      eventName: eventName,
-      description: eventDescription,
+    let updatedPostData  = {
+      eventName: updatedEvent.eventName,
+      description: updatedEvent.eventDescription,
       eventLocation: {
-        streetAddress: eventLocation.streetAddress,
-        city: eventLocation.city,
-        state: eventLocation.state,
-        zip: eventLocation.zip,
+        streetAddress: updatedEvent.eventLocation.streetAddress,
+        city: updatedEvent.eventLocation.city,
+        state: updatedEvent.eventLocation.state,
+        zip: updatedEvent.eventLocation.zip,
       },
-      contactEmail: contactEmail,
-      maxCapacity: maxCapacity,
-      priceOfAdmission: priceOfAdmission,
-      eventDate: eventDate,
-      startTime: startTime,
-      endTime: endTime,
-      publicEvent: publicEvent,
+      contactEmail: updatedEvent.contactEmail,
+      maxCapacity: updatedEvent.maxCapacity,
+      priceOfAdmission: updatedEvent.priceOfAdmission,
+      eventDate: updatedEvent.eventDate,
+      startTime: updatedEvent.startTime,
+      endTime: updatedEvent.endTime,
+      publicEvent: updatedEvent.publicEvent,
     };
 
     const eventCollection = await events();
 
-    const insertInfo = await eventCollection.insertOne(newEvent);
-    if (!insertInfo.acknowledged || !insertInfo.insertedId)
-      throw "Could not add Event";
-    const newId = insertInfo.insertedId.toString();
-
-    const event = await get(newId);
-    return event;
+    const updateInfo  = await eventCollection.findOneAndReplace(
+      {_id: new ObjectId(id)},
+      updatedEventData,
+      {returnDocument: 'after'}
+    );
+    if (!updateInfo)
+      throw `Error: Update failed! Could not update event with id ${id}`;
+    return updateInfo;
   },
 };
 

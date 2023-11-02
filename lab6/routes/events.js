@@ -217,6 +217,145 @@ router
   })
   .put(async (req, res) => {
     //code here for PUT
+    const updatedeventData = req.body;
+    //make sure there is something present in the req.body
+    if (!updatedeventData || Object.keys(updatedeventData).length === 0) {
+      return res
+        .status(400)
+        .json({ error: "There are no fields in the request body" });
+    }
+
+    try {
+      req.params.eventId = checkId(req.params.eventId, 'ID url param');
+      if (
+        !updatedeventData.eventName ||
+        typeof updatedeventData.eventName !== "string" ||
+        updatedeventData.eventName.trim().length < 5
+      ) {
+        throw "Invalid or missing eventName";
+      }
+      updatedeventData.eventName = updatedeventData.eventName.trim();
+
+      if (
+        !updatedeventData.eventDescription ||
+        typeof updatedeventData.eventDescription !== "string" ||
+        updatedeventData.eventDescription.trim().length < 25
+      ) {
+        throw "Invalid or missing eventDescription";
+      }
+      updatedeventData.eventDescription = updatedeventData.eventDescription.trim();
+
+      if (
+        !updatedeventData.contactEmail ||
+        typeof updatedeventData.contactEmail !== "string" ||
+        !isValidEmail(updatedeventData.contactEmail.trim())
+      ) {
+        throw "Invalid or missing contactEmail";
+      }
+      updatedeventData.contactEmail = updatedeventData.contactEmail.trim();
+
+      if (
+        !updatedeventData.eventDate ||
+        typeof updatedeventData.eventDate !== "string" ||
+        !isValidDate(updatedeventData.eventDate)
+      ) {
+        throw "Invalid or missing eventDate";
+      }
+      updatedeventData.eventDate = updatedeventData.eventDate.trim();
+
+      const eventDate = new Date(updatedeventData.eventDate);
+
+      if (eventDate <= new Date()) {
+        throw "Event date must be in the future";
+      }
+
+      if (
+        !updatedeventData.startTime ||
+        typeof updatedeventData.startTime !== "string" ||
+        !isValidTime(updatedeventData.startTime)
+      ) {
+        throw "Invalid or missing startTime";
+      }
+      updatedeventData.startTime = updatedeventData.startTime.trim();
+
+      if (
+        !updatedeventData.endTime ||
+        typeof updatedeventData.endTime !== "string" ||
+        !isValidTime(updatedeventData.endTime)
+      ) {
+        throw "Invalid or missing endTime";
+      }
+      updatedeventData.endTime = neweventData.endTime.trim();
+
+      const startTime = new Date(`2000-01-01 ${updatedeventData.startTime}`);
+      const endTime = new Date(`2000-01-01 ${updatedeventData.endTime}`);
+
+      if (startTime >= endTime) {
+        throw "Start time must be earlier than end time";
+      }
+
+      if (endTime - startTime < 30 * 60 * 1000) {
+        throw "End time should be at least 30 minutes later than start time";
+      }
+
+      if (typeof updatedeventData.publicEvent !== "boolean") {
+        throw "Invalid or missing publicEvent";
+      }
+
+      if (
+        updatedeventData.maxCapacity === undefined ||
+        typeof updatedeventData.maxCapacity !== "number" ||
+        updatedeventData.maxCapacity <= 0
+      ) {
+        throw "Invalid or missing maxCapacity";
+      }
+
+      if (
+        updatedeventData.priceOfAdmission === undefined ||
+        (typeof updatedeventData.priceOfAdmission !== "number" &&
+          typeof updatedeventData.priceOfAdmission !== "string") ||
+        parseFloat(updatedeventData.priceOfAdmission) < 0
+      ) {
+        throw "Invalid or missing priceOfAdmission";
+      }
+
+      updatedeventData.maxCapacity = parseInt(updatedeventData.maxCapacity);
+
+      if (typeof updatedeventData.eventLocation !== "object") {
+        throw "Invalid eventLocation";
+      }
+
+      if (
+        typeof updatedeventData.eventLocation.streetAddress !== "string" ||
+        updatedeventData.eventLocation.streetAddress.trim().length < 3 ||
+        typeof updatedeventData.eventLocation.city !== "string" ||
+        updatedeventData.eventLocation.city.trim().length < 3 ||
+        typeof updatedeventData.eventLocation.state !== "string" ||
+        !isValidState(updatedeventData.eventLocation.state) ||
+        typeof updatedeventData.eventLocation.zip !== "string" ||
+        !isValidZip(updatedeventData.eventLocation.zip)
+      ) {
+        throw "Invalid eventLocation properties";
+      }
+      updatedeventData.eventLocation.streetAddress =
+      updatedeventData.eventLocation.streetAddress.trim();
+      updatedeventData.eventLocation.city = updatedeventData.eventLocation.city.trim();
+      updatedeventData.eventLocation.state =
+      updatedeventData.eventLocation.state.trim();
+    } catch (e) {
+      return res.status(400).json({ error: e });
+    }
+
+    try {
+      const updatedEvent = await eventData.update(
+        req.params.eventId,
+        updatedeventData
+      );
+      res.json(updatedEvent);
+    } catch (e) {
+      res.status(404).json({error: e});
+    }
+
   });
 
 export default router;
