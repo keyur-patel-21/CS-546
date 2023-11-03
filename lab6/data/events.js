@@ -177,13 +177,25 @@ const exportedMethods = {
 
   async update(id, updatedEvent) {
     id = checkId(id);
-    if (typeof updatedEvent.eventName !== "string" || updatedEvent.eventName.trim().length < 5) {
+
+    // Trim string inputs
+    updatedEvent.eventName = updatedEvent.eventName.trim();
+    updatedEvent.eventDescription = updatedEvent.eventDescription.trim();
+    updatedEvent.contactEmail = updatedEvent.contactEmail.trim();
+    updatedEvent.eventDate = updatedEvent.eventDate.trim();
+    updatedEvent.startTime = updatedEvent.startTime.trim();
+    updatedEvent.endTime = updatedEvent.endTime.trim();
+
+    if (
+      typeof updatedEvent.eventName !== "string" ||
+      updatedEvent.eventName.length < 5
+    ) {
       throw "Invalid eventName";
     }
 
     if (
       typeof updatedEvent.eventDescription !== "string" ||
-      updatedEvent.eventDescription.trim().length < 25
+      updatedEvent.eventDescription.length < 25
     ) {
       throw "Invalid eventDescription";
     }
@@ -238,27 +250,29 @@ const exportedMethods = {
       throw "Invalid eventLocation";
     }
 
+    // Validate eventLocation properties
+    const eventLocation = updatedEvent.eventLocation;
     if (
-      typeof updatedEvent.eventLocation.streetAddress !== "string" ||
-      updatedEvent.eventLocation.streetAddress.trim().length < 3 ||
-      typeof updatedEvent.eventLocation.city !== "string" ||
-      updatedEvent.eventLocation.city.trim().length < 3 ||
-      typeof updatedEvent.eventLocation.state !== "string" ||
-      !isValidState(updatedEvent.eventLocation.state) ||
-      typeof updatedEvent.eventLocation.zip !== "string" ||
-      !isValidZip(updatedEvent.eventLocation.zip)
+      typeof eventLocation.streetAddress !== "string" ||
+      eventLocation.streetAddress.trim().length < 3 ||
+      typeof eventLocation.city !== "string" ||
+      eventLocation.city.trim().length < 3 ||
+      typeof eventLocation.state !== "string" ||
+      !isValidState(eventLocation.state) ||
+      typeof eventLocation.zip !== "string" ||
+      !isValidZip(eventLocation.zip)
     ) {
       throw "Invalid eventLocation properties";
     }
 
-    let updatedPostData  = {
+    let updatedPostData = {
       eventName: updatedEvent.eventName,
       description: updatedEvent.eventDescription,
       eventLocation: {
-        streetAddress: updatedEvent.eventLocation.streetAddress,
-        city: updatedEvent.eventLocation.city,
-        state: updatedEvent.eventLocation.state,
-        zip: updatedEvent.eventLocation.zip,
+        streetAddress: eventLocation.streetAddress,
+        city: eventLocation.city,
+        state: eventLocation.state,
+        zip: eventLocation.zip,
       },
       contactEmail: updatedEvent.contactEmail,
       maxCapacity: updatedEvent.maxCapacity,
@@ -271,10 +285,10 @@ const exportedMethods = {
 
     const eventCollection = await events();
 
-    const updateInfo  = await eventCollection.findOneAndReplace(
-      {_id: new ObjectId(id)},
+    const updateInfo = await eventCollection.findOneAndReplace(
+      { _id: new ObjectId(id) },
       updatedEvent,
-      {returnDocument: 'after'}
+      { returnDocument: "after" }
     );
     if (!updateInfo)
       throw `Error: Update failed! Could not update event with id ${id}`;
