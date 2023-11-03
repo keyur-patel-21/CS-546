@@ -23,13 +23,20 @@ const exportedMethods = {
     endTime,
     publicEvent
   ) {
-    if (typeof eventName !== "string" || eventName.trim().length < 5) {
+    eventName = eventName.trim();
+    eventDescription = eventDescription.trim();
+    contactEmail = contactEmail.trim();
+    eventDate = eventDate.trim();
+    startTime = startTime.trim();
+    endTime = endTime.trim();
+
+    if (typeof eventName !== "string" || eventName.length < 5) {
       throw "Invalid eventName";
     }
 
     if (
       typeof eventDescription !== "string" ||
-      eventDescription.trim().length < 25
+      eventDescription.length < 25
     ) {
       throw "Invalid eventDescription";
     }
@@ -126,7 +133,8 @@ const exportedMethods = {
 
     const event = await this.get(newId);
     return event;
-  },
+  }
+,
 
   async getAll() {
     const eventCollection = await events();
