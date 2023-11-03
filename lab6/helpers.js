@@ -31,7 +31,7 @@ function isValidDate(dateString) {
 }
 
 function isValidTime(timeString) {
-  const timePattern = /^(0?[1-9]|1[0-2]):[0-5][0-9][APap][mM]$/;
+  const timePattern = /^(0?[1-9]|1[0-2]):[0-5][0-9] [APap][mM]$/;
   return timePattern.test(timeString);
 }
 
