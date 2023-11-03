@@ -117,8 +117,7 @@ router
 
       if (
         neweventData.priceOfAdmission === undefined ||
-        (typeof neweventData.priceOfAdmission !== "number" &&
-          typeof neweventData.priceOfAdmission !== "string") ||
+        typeof neweventData.priceOfAdmission !== "number" ||
         parseFloat(neweventData.priceOfAdmission) < 0
       ) {
         throw "Invalid or missing priceOfAdmission";
