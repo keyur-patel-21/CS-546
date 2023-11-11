@@ -1,3 +1,31 @@
 {{! This will be your default layout for all handlebars file rendered. This will be inherited by all other templates. }}
 {{! Refer lecture code to learn more on how this works: https://github.com/stevens-cs546-cs554/CS-546/tree/master/lecture_08/code/HTML_Templating }}
 
+
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8" />
+    <title>My Site</title>
+    <link rel="stylesheet" href="/public/css/site.css" />
+  </head>
+
+  <body>
+    <header>
+      <nav>
+        <ul>
+          <li><a href="/posts/new">Add a Post</a></li>
+        </ul>
+      </nav>
+      <p>I'm a header</p>
+    </header>
+
+    <p>I will be on every page of the site</p>
+    <main>
+      {{{body}}}
+    </main>
+    <footer>I'm a footer</footer>
+
+  </body>
+
+</html>
