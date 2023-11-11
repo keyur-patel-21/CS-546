@@ -1,0 +1,11 @@
+{
+  "name": "cs-546-lab-8",
+  "version": "1.0.0",
+  "description": "This is my lab 8 for cs 546",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "Keyur Patel 20010939",
+  "license": "ISC"
+}
