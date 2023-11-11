@@ -10,25 +10,32 @@ You should have a main element, and inside of the main element have a p element 
 Also inside the main element, you will have a form; this form will POST to /searchmarvelcharacters. This form will have an input and a label; You will give the input and name AND id of "searchCharacterByName".  The label should properly reference the same id as the input. You should also have a input with a type of submit that submits the form. 
  -->
 
- <!DOCTYPE html>
+
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Marvel Character Finder</title>
-    <link rel="stylesheet" href="/public/site.css">
-</head>
-<body>
+    <link rel="stylesheet" href="/public/site.css" />
+  </head>
+  <body>
     <header>
-        <h1>Marvel Character Finder</h1>
+      <h1>Marvel Character Finder</h1>
     </header>
     <main>
-        <p>Welcome to Marvel Character Finder! This website helps you search for your favorite Marvel characters. Simply enter the character's name below to get started.</p>
-        <form action="/searchmarvelcharacters" method="POST">
-            <label for="searchCharacterByName">Character Name:</label>
-            <input type="text" id="searchCharacterByName" name="searchCharacterByName" required>
-            <input type="submit" value="Search">
-        </form>
+      <p>Welcome to Marvel Character Finder! This website helps you search for
+        your favorite Marvel characters. Simply enter the character's name below
+        to get started.</p>
+      <form action="/searchmarvelcharacters" method="POST">
+        <label for="searchCharacterByName">Character Name:</label>
+        <input
+          type="text"
+          id="searchCharacterByName"
+          name="searchCharacterByName"
+          required
+        />
+        <input type="submit" value="Search" />
+      </form>
     </main>
-</body>
+  </body>
 </html>
