@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "This is my lab 8 for cs 546",
   "main": "app.js",
+  "type": "module",
   "scripts": {
     "start": "node app.js"
   },
