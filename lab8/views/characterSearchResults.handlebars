@@ -13,3 +13,37 @@ The title of the document should be "Marvel Characters Found". You should have t
     matching
     the searchCharacterByName found in the request body in the following format (after searching spider).
     }}
+
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Marvel Characters Found</title>
+    <link rel="stylesheet" href="/public/site.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Marvel Characters Found</h1>
+      {{#if searchCharacterByName}}
+        <h2>Results for: {{searchCharacterByName}}</h2>
+      {{/if}}
+    </header>
+    <main>
+      {{#if charactersFound}}
+        <ol>
+          {{#each charactersFound}}
+            <li>
+              <a href="/marvelcharacter/{{id}}">{{name}}</a>
+            </li>
+          {{/each}}
+        </ol>
+        <a href="/" class="search-again">Search for Another Character</a>
+      {{else}}
+        <p class="not-found">We're sorry, but no results were found for
+          {{searchCharacterByName}}.</p>
+        <a href="/" class="search-again">Search for Another Character</a>
+      {{/if}}
+    </main>
+  </body>
+</html>
