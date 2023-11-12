@@ -39,14 +39,7 @@ export const searchCharacterById = async (id) => {
 
   const baseUrl = "https://gateway.marvel.com:443/v1/public/characters/";
   const url =
-    baseUrl +
-    id +
-    "?ts=" +
-    ts +
-    "&apikey=" +
-    publickey +
-    "&hash=" +
-    hash;
+    baseUrl + id + "?ts=" + ts + "&apikey=" + publickey + "&hash=" + hash;
 
   const { data } = await axios.get(url);
   let characterData = data;
