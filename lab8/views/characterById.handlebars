@@ -12,3 +12,34 @@ The title of the document should be the name of the character. You should have t
 
     You must also provide an a tag that links back to your / route with the text Make another search.
     }}
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{character.name}}</title>
+    <link rel="stylesheet" href="/public/site.css" />
+  </head>
+  <body>
+    <main>
+      <article>
+        {{#if character.name}}
+          <h1>{{character.name}}</h1>
+        {{/if}}
+        <img
+          src="{{character.thumbnail.path}}/portrait_uncanny.jpg"
+          alt="{{character.name}} Image"
+        />
+        {{#if character.description}}
+          <p>{{character.description}}</p>
+        {{/if}}
+        <h2>Comics</h2>
+        <ul>
+          {{#each character.comics.items}}
+            <li>{{name}}</li>
+          {{/each}}
+        </ul>
+      </article>
+    </main>
+  </body>
+</html>
