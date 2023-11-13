@@ -84,7 +84,7 @@ router.route("/marvelcharacter/:id").get(async (req, res) => {
   }
   try {
     const character = await searchCharacterById(req.params.id);
-    res.render("characterById", { character: character });
+    res.render("characterById", { character: character.data.results });
   } catch (e) {
     res.status(400).json({ error: e.message });
   }
