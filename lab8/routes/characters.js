@@ -104,7 +104,7 @@ router.route("/marvelcharacter/:id").get(async (req, res) => {
   try {
     const character = await searchCharacterById(searchData);
     res.render("characterById", {
-      character: character.data.results,
+      character: character.data.results[0],
       title: "Character Found",
     });
   } catch (e) {
