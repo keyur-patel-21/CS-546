@@ -75,16 +75,38 @@ router.route("/searchmarvelcharacters").post(async (req, res) => {
 //   }
 // });
 
+// router.route("/marvelcharacter/:id").get(async (req, res) => {
+//   //code here for GET a single character
+//   let searchData = req.params.id;
+//   try {
+//     searchData = helper.checkString(searchData, "id");
+//   } catch (e) {
+//     return res.status(400).json({ error: e.message });
+//   }
+//   try {
+//     const character = await searchCharacterById(searchData);
+//     res.render("characterById", { character: character.data.results });
+//   } catch (e) {
+//     res.status(400).json({ error: e.message });
+//   }
+// });
+
 router.route("/marvelcharacter/:id").get(async (req, res) => {
-  //code here for GET a single character
+  let searchData = req.params.id;
   try {
-    req.params.id = helper.checkString(req.params.id, "id");
+    if (!searchData || typeof searchData !== "string") {
+      throw "Please enter valid string for your search";
+    }
   } catch (e) {
-    return res.status(400).json({ error: e.message });
+    res.status(400).json({ error: e.message });
   }
+
   try {
-    const character = await searchCharacterById(req.params.id);
-    res.render("characterById", { character: character.data.results });
+    const character = await searchCharacterById(searchData);
+    res.render("characterById", {
+      character: character.data.results,
+      title: "Character Found",
+    });
   } catch (e) {
     res.status(400).json({ error: e.message });
   }
