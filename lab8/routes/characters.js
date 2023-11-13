@@ -37,60 +37,6 @@ router.route("/searchmarvelcharacters").post(async (req, res) => {
   }
 });
 
-// router.route("/searchmarvelcharacters").post(async (req, res) => {
-//   let searchData = req.body;
-//   let errors = [];
-//   var regEx = /^[a-zA-Z]+$/;
-
-//   if (
-//     !searchData.searchCharacterByName ||
-//     typeof searchData.searchCharacterByName !== "string" ||
-//     !searchData.searchCharacterByName.trim().replace(/\s/g, "").length
-//   ) {
-//     errors.push("Please enter valid string for your search");
-//   } else if (!regEx.test(searchData.searchCharacterByName)) {
-//     errors.push("Search Data should contains alphabets only");
-//   }
-
-//   if (errors.length) {
-//     res.statusCode = 400;
-//     res.render("error", { errors: errors, title: "error" });
-//     return;
-//   }
-//   try {
-//     const characterList = await searchCharacterByName(
-//       searchData.searchCharacterByName
-//     );
-//     res.render("characterSearchResults", {
-//       searchCharacterByName: searchData.searchCharacterByName,
-//       characters: characterList.data.results,
-//       title: "Character Found",
-//     });
-//   } catch (e) {
-//     res.statusCode = 404;
-//     res.render("error", {
-//       searchCharacterByName: searchData.searchCharacterByName,
-//       title: "No Character Found",
-//     });
-//   }
-// });
-
-// router.route("/marvelcharacter/:id").get(async (req, res) => {
-//   //code here for GET a single character
-//   let searchData = req.params.id;
-//   try {
-//     searchData = helper.checkString(searchData, "id");
-//   } catch (e) {
-//     return res.status(400).json({ error: e.message });
-//   }
-//   try {
-//     const character = await searchCharacterById(searchData);
-//     res.render("characterById", { character: character.data.results });
-//   } catch (e) {
-//     res.status(400).json({ error: e.message });
-//   }
-// });
-
 router.route("/marvelcharacter/:id").get(async (req, res) => {
   let searchData = req.params.id;
   try {

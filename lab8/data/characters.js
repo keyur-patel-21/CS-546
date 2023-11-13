@@ -14,7 +14,7 @@ export const searchCharacterByName = async (name) => {
   if (!name) throw "You must provide a name to search";
   if (typeof name !== "string" || name.trim().length === 0)
     throw "Please provide a valid name to search";
-
+  name = name.trim();
   const baseUrl = "https://gateway.marvel.com:443/v1/public/characters?";
   const url =
     baseUrl +
