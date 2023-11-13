@@ -24,8 +24,8 @@ The title of the document should be "Marvel Characters Found". You should have t
   <body>
     <header>
       <h1>Marvel Characters Found</h1>
-      {{#if name}}
-        <h2>Results for: {{name}}</h2>
+      {{#if searchCharacterByName}}
+        <h2>Results for: {{searchCharacterByName}}</h2>
       {{/if}}
     </header>
     <main>
@@ -40,7 +40,7 @@ The title of the document should be "Marvel Characters Found". You should have t
         <a href="/" class="search-again">Search for Another Character</a>
       {{else}}
         <p class="not-found">We're sorry, but no results were found for
-          {{name}}.</p>
+          {{searchCharacterByName}}.</p>
         <a href="/" class="search-again">Search for Another Character</a>
       {{/if}}
     </main>
