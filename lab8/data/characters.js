@@ -37,11 +37,13 @@ export const searchCharacterById = async (id) => {
   if (typeof id !== "string" || id.trim().length === 0)
     throw "Please provide a valid id to search";
 
-  const baseUrl = "https://gateway.marvel.com:443/v1/public/characters/";
+  id = id.trim();
+
+  const baseUrl = "https://gateway.marvel.com/v1/public/characters/";
   const url =
     baseUrl + id + "?ts=" + ts + "&apikey=" + publickey + "&hash=" + hash;
 
   const { data } = await axios.get(url);
-  let characterData = data;
-  return characterData;
+  let character = data;
+  return character;
 };
