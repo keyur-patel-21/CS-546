@@ -12,3 +12,37 @@ A buttom to submit the form (make sure this is a button and not an input!)
 
 A button to submit the form
  -->
+
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/public/css/main.css">
+    <title>Palindrome Checker</title>
+</head>
+<body>
+
+    <header>
+        <h1>Palindrome Checker</h1>
+    </header>
+
+    <main>
+        <form id="palindromeForm">
+            <label for="palindrome_input">Enter a phrase or word:</label>
+            <input type="text" name="palindrome_input" id="palindrome_input" required>
+            <button type="submit">Check</button>
+        </form>
+        
+        <p class="error" style="color: red; display: none;">Error: Please enter a valid phrase or word.</p>
+
+        <ol id="palindromes"></ol>
+    </main>
+
+    <footer>
+        <p>Created by [Keyur Patel] | Student ID: [20010939]</p>
+    </footer>
+
+    <script src="/public/js/main.js"></script>
+</body>
+</html>
