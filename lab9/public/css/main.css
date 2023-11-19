@@ -24,10 +24,21 @@ form {
 
 button {
   margin-left: 10px;
+  background-color: #4caf50; /* Green */
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049; /* Darker Green */
 }
 
 .error {
   margin-top: 10px;
+  color: red;
 }
 
 footer {
@@ -38,4 +49,30 @@ footer {
   position: fixed;
   width: 100%;
   bottom: 0;
+}
+
+/* Additional Selectors for General Styling */
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+#palindromes {
+  list-style-type: none;
+  padding: 0;
+}
+
+.prime {
+  color: #00ff00; /* Green */
+}
+
+.not-prime {
+  color: #ff0000; /* Red */
 }
