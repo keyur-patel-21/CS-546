@@ -24,7 +24,7 @@ form {
 
 button {
   margin-left: 10px;
-  background-color: #4caf50; /* Green */
+  background-color: #4caf50;
   color: white;
   padding: 10px;
   border: none;
@@ -33,7 +33,7 @@ button {
 }
 
 button:hover {
-  background-color: #45a049; /* Darker Green */
+  background-color: #45a049;
 }
 
 .error {
@@ -50,8 +50,6 @@ footer {
   width: 100%;
   bottom: 0;
 }
-
-/* Additional Selectors for General Styling */
 
 label {
   display: block;
@@ -70,9 +68,9 @@ input[type="text"] {
 }
 
 .prime {
-  color: #00ff00; /* Green */
+  color: #00ff00;
 }
 
 .not-prime {
-  color: #ff0000; /* Red */
+  color: #ff0000;
 }
