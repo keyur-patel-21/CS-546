@@ -4,8 +4,8 @@ import pelindromeCheckRoutes from './palindromeCheck.js';
 const constructorMethod = (app) => {
   app.use('/', pelindromeCheckRoutes);
 
-  app.use('*', (req, res) => {
-    res.redirect('/static/homepage');
+  app.use("*", (req, res) => {
+    res.status(404).json({ error: "Route Not found" });
   });
 };
 
