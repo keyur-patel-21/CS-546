@@ -7,32 +7,32 @@ document
 
     document.querySelector(".error").style.display = "none";
 
-    const inputValue = document
+    const input = document
       .getElementById("palindrome_input")
       .value.toLowerCase()
       .replace(/[^a-z0-9,]/g, "");
-    const words = inputValue.split(",");
+    const words = input.split(",");
 
-    if (inputValue.trim() === "" || words.every((word) => word.trim() === "")) {
+    if (input.trim() === "" || words.every((word) => word.trim() === "")) {
       document.querySelector(".error").style.display = "block";
       return;
     }
 
-    const palindromeResults = [];
+    const results = [];
     words.forEach((word) => {
       const strippedWord = word.replace(/[^a-z0-9]/g, "");
       const isPalindrome =
         strippedWord === strippedWord.split("").reverse().join("");
-      palindromeResults.push(isPalindrome);
+      results.push(isPalindrome);
     });
 
-    const isPrime = isPrimeNumber(palindromeResults.length);
+    const isPrime = isPrimeNumber(results.length);
 
-    const resultList = document.getElementById("palindromes");
+    const result = document.getElementById("palindromes");
     const listItem = document.createElement("li");
-    listItem.textContent = JSON.stringify(palindromeResults);
+    listItem.textContent = JSON.stringify(results);
     listItem.className = isPrime ? "prime" : "not-prime";
-    resultList.appendChild(listItem);
+    result.appendChild(listItem);
   });
 
 function isPrimeNumber(num) {
