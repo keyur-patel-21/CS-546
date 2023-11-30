@@ -104,6 +104,32 @@ export const registerUser = async (
   }
 };
 
+export const loginUser = async (emailAddress, password) => {
+  if (!emailAddress || !password || typeof emailAddress !== 'string' || typeof password !== 'string') {
+    throw 'Both emailAddress and password must be supplied.';
+  }
 
+  if (!validateEmail(emailAddress)) {
+    throw 'Invalid email address format.';
+  }
 
-export const loginUser = async (emailAddress, password) => {};
+  const lowerCaseEmail = emailAddress.toLowerCase();
+
+  // Query the database for the user with the given email address
+  const user = await users.findOne({ email: lowerCaseEmail });
+
+  if (!user) {
+    throw 'Either the email address or password is invalid.';
+  }
+
+  // Compare the hashed password in the database with the input password
+  const passwordMatch = await bcrypt.compare(password, user.password);
+
+  if (passwordMatch) {
+    // Return user information without the password
+    const { firstName, lastName, email, role } = user;
+    return { firstName, lastName, email, role };
+  } else {
+    throw 'Either the email address or password is invalid.';
+  }
+};
