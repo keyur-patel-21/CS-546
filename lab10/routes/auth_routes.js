@@ -180,16 +180,28 @@ router
 
 router.route("/protected").get(async (req, res) => {
   //code here for GET
+  res.render("protected");
 });
 
 router.route("/admin").get(async (req, res) => {
   //code here for GET
+  res.render("admin");
 });
 
-router.route("/error").get(async (req, res) => {
-  //code here for GET
+router.route('/error').get(async (req, res) => {
+  // Extract status code and error message from the query parameters or use defaults
+  const statusCode = req.query.status || 500;
+  const errorMessage = req.query.message || 'Internal Server Error';
+
+  // Render the error view with the provided status code and error message
+  res.status(statusCode).render('error', { status: statusCode, message: errorMessage });
 });
 
-router.route("/logout").get(async (req, res) => {
-  //code here for GET
+
+router.route('/logout').get(async (req, res) => {
+  // Expire/delete the AuthState cookie
+  res.clearCookie('AuthState');
+
+  // Inform the user that they have been logged out
+  res.render('logout', { message: 'You have been successfully logged out.' });
 });
