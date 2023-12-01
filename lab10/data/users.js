@@ -1,6 +1,6 @@
 // import mongo collections, bcrypt, and implement the following data functions
 import { users } from "../config/mongoCollections.js";
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 const validateEmail = (email) => {
   // Regular expression for a valid email address

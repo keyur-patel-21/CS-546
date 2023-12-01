@@ -1,7 +1,7 @@
 //import express, express router as shown in lecture code
 import { Router } from "express";
 const router = Router();
-import { registerUser, loginUser } from "../data/index.js";
+import { registerUser, loginUser } from "../data/users.js";
 
 // Function to validate email address format
 function isValidEmail(email) {
