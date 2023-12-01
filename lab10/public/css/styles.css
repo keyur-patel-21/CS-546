@@ -1,55 +1,48 @@
-/* You will create a CSS stylesheet in /public/css/styles.css; this file should have at least 5 rulesets.  You will need to utilize all 5 rulesets on each of the pages (not every page has to use all 5 rulesets each but all 5 rulesets must be utilized by the various pages in your application).  So you can have some rulesets for one page, some for another page but there needs to be at least 5 total rulesets that are used between all the pages.  */
-
 /* styles.css */
 
-/* Ruleset 1: Basic styling for the body */
+/* Rule Set 1: General Page Styling */
 body {
-  font-family: "Arial", sans-serif;
-  line-height: 1.6;
-  background-color: #f0f0f0;
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f4;
   color: #333;
-  margin: 0;
-  padding: 0;
 }
 
-/* Ruleset 2: Header styles */
-header {
-  background-color: #4285f4;
-  color: #fff;
-  padding: 10px;
-  text-align: center;
+/* Rule Set 2: Header Styling */
+h1 {
+  color: #0066cc;
 }
 
-/* Ruleset 3: Form styles */
+/* Rule Set 3: Form Styling */
 form {
-  margin: 20px;
-}
-
-label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-input {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
-  box-sizing: border-box;
-}
-
-/* Ruleset 4: Page-specific styles for the protected route */
-#protected-page {
+  max-width: 400px;
+  margin: 20px auto;
   padding: 20px;
   background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Ruleset 5: Link styles */
+/* Rule Set 4: Link Styling */
 a {
-  color: #4285f4;
+  color: #009688;
   text-decoration: none;
 }
 
 a:hover {
   text-decoration: underline;
+}
+
+/* Rule Set 5: Button Styling */
+button {
+  background-color: #009688;
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #00796b;
 }
