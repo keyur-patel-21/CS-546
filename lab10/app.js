@@ -1,7 +1,7 @@
 // Setup server, session and middleware here.
 import express from "express";
 const app = express();
-import session from 'express-session';
+import session from "express-session";
 import configRoutes from "./routes/index.js";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
@@ -31,7 +31,6 @@ app.use(rewriteUnsupportedBrowserMethods);
 
 app.engine("handlebars", exphbs.engine({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
-
 
 app.use(
   session({
@@ -72,8 +71,8 @@ app.use((req, res, next) => {
 
   console.log(`[${timestamp}]: ${req.method} ${req.originalUrl} (${userRole})`);
 
-  // Check if the user is already on the login page
-  if (req.originalUrl === "/login") {
+  // Check if the user is already on the login or register page
+  if (req.originalUrl === "/login" || req.originalUrl === "/register") {
     // Continue to the next middleware or route
     return next();
   }
@@ -93,14 +92,13 @@ app.use((req, res, next) => {
 
 // Continue with the rest of your middleware and route handling here
 
+// Continue with the rest of your middleware and route handling here
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).send('Internal Server Error');
+  res.status(500).send("Internal Server Error");
 });
-
-
-
 
 // 2. This middleware will only be used for the GET /login route and will do one of the following: If the user is authenticated AND they have a role of admin, the middleware function will redirect them to the /admin route, if the user is authenticated AND they have a role of user, you will redirect them to the /protected route. If the user is NOT authenticated, you will allow them to get through to the GET /login route. A logged in user should never be able to access the login form.
 
@@ -121,16 +119,13 @@ app.get("/login", (req, res, next) => {
 //  3. This middleware will only be used for the GET /register route and will do one of the following: If the user is authenticated AND they have a role of admin, the middleware function will redirect them to the /admin route, if the user is authenticated AND they have a role of user, you will redirect them to the /protected route. If the user is NOT authenticated, you will allow them to get through to the GET /register route. A logged in user should never be able to access the registration form.
 
 app.get("/register", (req, res, next) => {
-  // Redirect to /register if not authenticated
-  if (!req.session.user) {
-    return res.redirect("/register");
-  }
-
   // Redirect based on user role if authenticated
-  if (req.session.user.role === "admin") {
-    return res.redirect("/admin");
-  } else if (req.session.user.role === "user") {
-    return res.redirect("/protected");
+  if (req.session.user) {
+    if (req.session.user.role === "admin") {
+      return res.redirect("/admin");
+    } else if (req.session.user.role === "user") {
+      return res.redirect("/protected");
+    }
   }
 
   // Continue to the GET /register route for unexpected scenarios
