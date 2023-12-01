@@ -205,3 +205,6 @@ router.route('/logout').get(async (req, res) => {
   // Inform the user that they have been logged out
   res.render('logout', { message: 'You have been successfully logged out.' });
 });
+
+//export router
+export default router;
