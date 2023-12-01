@@ -2,9 +2,13 @@
 import express from "express";
 const app = express();
 import session from "express-session";
+import exphbs from "express-handlebars";
 import configRoutes from "./routes/index.js";
 
 app.use(express.json());
+app.engine("handlebars", exphbs.engine({ defaultLayout: "main" }));
+app.set("view engine", "handlebars");
+
 
 app.use(
   session({
@@ -35,31 +39,31 @@ app.use(
 // [Sun, 14 Apr 2019 23:56:44 GMT]: GET / (Authenticated User)
 // B. After you log the request info in step A,  if the user is authenticated AND they have a role of admin, the middleware function will redirect them to the /admin route, if the user is authenticated AND they have a role of user, you will redirect them to the /protected route. If the user is NOT authenticated, you will redirect them to the GET /login route.
 
-// app.use((req, res, next) => {
-//   // Log request information
-//   const timestamp = new Date().toUTCString();
-//   const isAuthenticated = req.session.user ? true : false;
-//   const userRole = req.session.user
-//     ? req.session.user.role
-//     : "Non-Authenticated User";
+app.use((req, res, next) => {
+  // Log request information
+  const timestamp = new Date().toUTCString();
+  const isAuthenticated = req.session.user ? true : false;
+  const userRole = req.session.user
+    ? req.session.user.role
+    : "Non-Authenticated User";
 
-//   console.log(`[${timestamp}]: ${req.method} ${req.originalUrl} (${userRole})`);
+  console.log(`[${timestamp}]: ${req.method} ${req.originalUrl} (${userRole})`);
 
-//   // Redirect based on user role if authenticated
-//   if (isAuthenticated) {
-//     if (req.session.user.role === "admin") {
-//       return res.redirect("/admin");
-//     } else if (req.session.user.role === "user") {
-//       return res.redirect("/protected");
-//     }
-//   } else {
-//     // Redirect to login if not authenticated
-//     return res.redirect("/login");
-//   }
+  // Redirect based on user role if authenticated
+  if (isAuthenticated) {
+    if (req.session.user.role === "admin") {
+      return res.redirect("/admin");
+    } else if (req.session.user.role === "user") {
+      return res.redirect("/protected");
+    }
+  } else {
+    // Redirect to login if not authenticated
+    return res.redirect("/login");
+  }
 
-//   // Continue to the next middleware or route
-//   next();
-// });
+  // Continue to the next middleware or route
+  next();
+});
 
 // 2. This middleware will only be used for the GET /login route and will do one of the following: If the user is authenticated AND they have a role of admin, the middleware function will redirect them to the /admin route, if the user is authenticated AND they have a role of user, you will redirect them to the /protected route. If the user is NOT authenticated, you will allow them to get through to the GET /login route. A logged in user should never be able to access the login form.
 
