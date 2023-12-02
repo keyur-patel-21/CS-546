@@ -80,13 +80,13 @@ router
     }
 
     try {
-      const result = await registerUser({
-        firstName: firstNameInput,
-        lastName: lastNameInput,
-        email: emailAddressInput,
-        password: passwordInput,
-        role: roleInput,
-      });
+      const result = await registerUser(
+        firstNameInput,
+        lastNameInput,
+        emailAddressInput,
+        passwordInput,
+        roleInput
+      );
 
       if (result.insertedUser) {
         res.redirect("/login");

@@ -36,6 +36,7 @@ app.use(
   })
 );
 
+// middlewares start here
 app.use((req, res, next) => {
   const timestamp = new Date().toUTCString();
   const isAuthenticated = req.session.user ? true : false;

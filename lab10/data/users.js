@@ -7,13 +7,15 @@ const validateEmail = (email) => {
 };
 
 const checkDuplicateEmail = async (email) => {
-  const existingUser = await users.findOne({ email });
+  const userCollection = await users();
+  const existingUser = await userCollection.findOne({ email });
   return !!existingUser;
 };
 
 const insertUser = async (firstName, lastName, email, hashedPassword, role) => {
+  const userCollection = await users();
   try {
-    const result = await users.insertOne({
+    const result = await userCollection.insertOne({
       firstName,
       lastName,
       email,
