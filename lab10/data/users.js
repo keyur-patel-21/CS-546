@@ -1,5 +1,5 @@
 import { users } from "../config/mongoCollections.js";
-import bcrypt from 'bcryptjs';
+import bcrypt from "bcryptjs";
 
 const validateEmail = (email) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
@@ -24,7 +24,7 @@ const insertUser = async (firstName, lastName, email, hashedPassword, role) => {
     });
     return result.insertedId ? true : false;
   } catch (error) {
-    console.error('Error inserting user:', error);
+    console.error("Error inserting user:", error);
     return false;
   }
 };
@@ -42,50 +42,40 @@ export const registerUser = async (
   password = password.trim();
   role = role.trim();
 
-  if (
-    !firstName ||
-    !lastName ||
-    !emailAddress ||
-    !password ||
-    !role ||
-    typeof firstName !== 'string' ||
-    typeof lastName !== 'string' ||
-    typeof emailAddress !== 'string' ||
-    typeof password !== 'string' ||
-    typeof role !== 'string'
-  ) {
-    throw 'All fields must be supplied.';
+  if (!firstName || !lastName || !emailAddress || !password || !role) {
+    throw "All fields must be supplied.";
   }
 
   if (!/^[a-zA-Z]{2,25}$/.test(firstName)) {
-    throw 'Invalid first name.';
+    throw "Invalid first name.";
   }
 
   if (!/^[a-zA-Z]{2,25}$/.test(lastName)) {
-    throw 'Invalid last name.';
+    throw "Invalid last name.";
   }
 
   if (!validateEmail(emailAddress)) {
-    throw 'Invalid email address format.';
+    throw "Invalid email address format.";
   }
 
   const lowerCaseEmail = emailAddress.toLowerCase();
 
   const isDuplicateEmail = await checkDuplicateEmail(lowerCaseEmail);
   if (isDuplicateEmail) {
-    throw 'Email address already exists.';
+    throw "Email address already exists.";
   }
 
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   if (!passwordRegex.test(password)) {
-    throw 'Invalid password.';
+    throw "Invalid password.";
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const lowerCaseRole = role.toLowerCase();
-  if (lowerCaseRole !== 'admin' && lowerCaseRole !== 'user') {
-    throw 'Invalid role.';
+  if (lowerCaseRole !== "admin" && lowerCaseRole !== "user") {
+    throw "Invalid role.";
   }
 
   const insertSuccess = await insertUser(
@@ -99,30 +89,34 @@ export const registerUser = async (
   if (insertSuccess) {
     return { insertedUser: true };
   } else {
-    throw 'Error inserting user into the database.';
+    throw "Error inserting user into the database.";
   }
 };
-
 
 export const loginUser = async (emailAddress, password) => {
   emailAddress = emailAddress.trim();
   password = password.trim();
 
-  if (!emailAddress || !password || typeof emailAddress !== 'string' || typeof password !== 'string') {
-    throw 'Both emailAddress and password must be supplied.';
-  }
-
-  if (!validateEmail(emailAddress)) {
-    throw 'Invalid email address format.';
+  if (
+    !emailAddress ||
+    !password ||
+    typeof emailAddress !== "string" ||
+    typeof password !== "string"
+  ) {
+    throw "Both emailAddress and password must be supplied.";
   }
 
   const lowerCaseEmail = emailAddress.toLowerCase();
-  
+
+  if (!validateEmail(lowerCaseEmail)) {
+    throw "Invalid email address format.";
+  }
+
   const userCollection = await users();
   const user = await userCollection.findOne({ email: lowerCaseEmail });
 
   if (!user) {
-    throw 'Either the email address or password is invalid.';
+    throw "Either the email address or password is invalid.";
   }
 
   const passwordMatch = await bcrypt.compare(password, user.password);
@@ -131,7 +125,6 @@ export const loginUser = async (emailAddress, password) => {
     const { firstName, lastName, email, role } = user;
     return { firstName, lastName, email, role };
   } else {
-    throw 'Either the email address or password is invalid.';
+    throw "Either the email address or password is invalid.";
   }
 };
-
