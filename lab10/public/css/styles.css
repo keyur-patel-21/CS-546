@@ -1,8 +1,8 @@
-
 body {
   font-family: 'Arial', sans-serif;
   background-color: #f4f4f4;
   color: #333;
+  text-align: center; /* Center inline elements */
 }
 
 h1 {
@@ -11,12 +11,13 @@ h1 {
 
 form {
   max-width: 400px;
-  margin: 20px auto;
+  margin: 20px auto; /* Center block-level element */
   padding: 20px;
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: left; /* Reset text alignment for form content */
 }
 
 a {
