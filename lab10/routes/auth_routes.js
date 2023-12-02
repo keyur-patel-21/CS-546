@@ -105,7 +105,6 @@ router
   })
   .post(async (req, res) => {
     const { emailAddressInput, passwordInput } = req.body;
-
     if (!emailAddressInput || !passwordInput) {
       return res
         .status(400)

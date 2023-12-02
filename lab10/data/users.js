@@ -108,7 +108,8 @@ export const loginUser = async (emailAddress, password) => {
 
   const lowerCaseEmail = emailAddress.toLowerCase();
 
-  const user = await users.findOne({ email: lowerCaseEmail });
+  const userCollection = await users();
+  const user = await userCollection.findOne({ email: lowerCaseEmail });
 
   if (!user) {
     throw 'Either the email address or password is invalid.';

@@ -10,14 +10,17 @@
   <form id="login-form" action="/login" method="POST">
     <div>
       <label for="emailAddressInput">Email Address:</label>
-      <input type="email" id="emailAddressInput" name="emailAddress" required>
+      <input type="email" id="emailAddressInput" name="emailAddressInput" required>
     </div>
     <div>
       <label for="passwordInput">Password:</label>
-      <input type="password" id="passwordInput" name="password" required>
+      <input type="password" id="passwordInput" name="passwordInput" required>
     </div>
     <button type="submit">Login</button>
   </form>
+  {{#if error}}
+    <p class="error">{{error}}</p>
+  {{/if}}
   <p>Click <a href="/register">here</a> to register!</p>
   <script src="/public/js/client_side_validation.js"></script>
 </body>
