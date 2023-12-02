@@ -149,7 +149,7 @@ router
   });
 
 router.route("/protected").get(async (req, res) => {
-  res.render("protected");
+  res.render("protected", {firstName: req.session.user.firstName, lastName: req.session.user.lastName, currentTime: new Date(), role: req.session.user.role});
 });
 
 router.route("/admin").get(async (req, res) => {
