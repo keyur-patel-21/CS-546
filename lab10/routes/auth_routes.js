@@ -20,7 +20,7 @@ router.route("/").get(async (req, res) => {
 router
   .route("/register")
   .get(async (req, res) => {
-    res.render("register");
+    res.render("register", { title: "Sign up" });
   })
   .post(async (req, res) => {
     const {
@@ -101,7 +101,7 @@ router
 router
   .route("/login")
   .get(async (req, res) => {
-    res.render("login");
+    res.render("login", { title: "Login Page" });
   })
   .post(async (req, res) => {
     const { emailAddressInput, passwordInput } = req.body;
@@ -149,12 +149,25 @@ router
   });
 
 router.route("/protected").get(async (req, res) => {
-  res.render("protected", {
-    firstName: req.session.user.firstName,
-    lastName: req.session.user.lastName,
-    currentTime: new Date(),
-    role: req.session.user.role,
-  });
+  if (req.session.user.role === "admin") {
+    res.render("protected", {
+      firstName: req.session.user.firstName,
+      lastName: req.session.user.lastName,
+      currentTime: new Date(),
+      role: req.session.user.role,
+      isAdmin: true,
+      title: "Welcome Page",
+    });
+  }else{
+    res.render("protected", {
+      firstName: req.session.user.firstName,
+      lastName: req.session.user.lastName,
+      currentTime: new Date(),
+      role: req.session.user.role,
+      isAdmin: false,
+      title: "Welcome Page",
+    });
+  }
 });
 
 router.route("/admin").get(async (req, res) => {
@@ -163,6 +176,7 @@ router.route("/admin").get(async (req, res) => {
     lastName: req.session.user.lastName,
     currentTime: new Date(),
     role: req.session.user.role,
+    title: "Welcome Admin",
   });
 });
 
@@ -172,7 +186,11 @@ router.route("/error").get(async (req, res) => {
 
   res
     .status(statusCode)
-    .render("error", { status: statusCode, message: errorMessage });
+    .render("error", {
+      status: statusCode,
+      message: errorMessage,
+      title: "Error",
+    });
 });
 
 router.route("/logout").get(async (req, res) => {
