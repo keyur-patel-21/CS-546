@@ -3,9 +3,10 @@ const router = Router();
 import { registerUser, loginUser } from "../data/users.js";
 
 function isValidEmail(email) {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i; 
   return emailRegex.test(email);
 }
+
 
 function isValidPassword(password) {
   const passwordRegex =
@@ -32,60 +33,67 @@ router
       roleInput,
     } = req.body;
 
+    const trimmedFirstName = firstNameInput.trim();
+    const trimmedLastName = lastNameInput.trim();
+    const trimmedEmailAddress = emailAddressInput.trim();
+    const trimmedPassword = passwordInput.trim();
+    const trimmedConfirmPassword = confirmPasswordInput.trim();
+    const trimmedRole = roleInput.trim();
+
     if (
-      !firstNameInput ||
-      !lastNameInput ||
-      !emailAddressInput ||
-      !passwordInput ||
-      !confirmPasswordInput ||
-      !roleInput
+      !trimmedFirstName ||
+      !trimmedLastName ||
+      !trimmedEmailAddress ||
+      !trimmedPassword ||
+      !trimmedConfirmPassword ||
+      !trimmedRole
     ) {
       return res
         .status(400)
         .render("register", { error: "All fields are required" });
     }
 
-    if (!/^[a-zA-Z]{2,25}$/.test(firstNameInput)) {
+    if (!/^[a-zA-Z]{2,25}$/.test(trimmedFirstName)) {
       return res
         .status(400)
         .render("register", { error: "Invalid firstNameInput" });
     }
 
-    if (!/^[a-zA-Z]{2,25}$/.test(lastNameInput)) {
+    if (!/^[a-zA-Z]{2,25}$/.test(trimmedLastName)) {
       return res
         .status(400)
         .render("register", { error: "Invalid lastNameInput" });
     }
 
-    if (!isValidEmail(emailAddressInput)) {
+    if (!isValidEmail(trimmedEmailAddress)) {
       return res
         .status(400)
         .render("register", { error: "Invalid emailAddressInput" });
     }
 
-    if (!isValidPassword(passwordInput)) {
+    if (!isValidPassword(trimmedPassword)) {
       return res
         .status(400)
         .render("register", { error: "Invalid passwordInput" });
     }
 
-    if (passwordInput !== confirmPasswordInput) {
+    if (trimmedPassword !== trimmedConfirmPassword) {
       return res.status(400).render("register", {
         error: "Password and confirmPassword do not match",
       });
     }
 
-    if (roleInput !== "admin" && roleInput !== "user") {
+    if (trimmedRole !== "admin" && trimmedRole !== "user") {
       return res.status(400).render("register", { error: "Invalid roleInput" });
     }
 
     try {
       const result = await registerUser(
-        firstNameInput,
-        lastNameInput,
-        emailAddressInput,
-        passwordInput,
-        roleInput
+        trimmedFirstName,
+        trimmedLastName,
+        trimmedEmailAddress,
+        trimmedPassword,
+        trimmedRole
       );
 
       if (result.insertedUser) {
@@ -98,20 +106,25 @@ router
     }
   });
 
-router
+
+  router
   .route("/login")
   .get(async (req, res) => {
     res.render("login", { title: "Login Page" });
   })
   .post(async (req, res) => {
     const { emailAddressInput, passwordInput } = req.body;
-    if (!emailAddressInput || !passwordInput) {
+
+    const trimmedEmailAddress = emailAddressInput.trim();
+    const trimmedPassword = passwordInput.trim();
+
+    if (!trimmedEmailAddress || !trimmedPassword) {
       return res
         .status(400)
         .render("login", { error: "Email address and password are required" });
     }
 
-    if (!isValidEmail(emailAddressInput)) {
+    if (!isValidEmail(trimmedEmailAddress)) {
       return res
         .status(400)
         .render("login", { error: "Invalid email address format" });
@@ -119,8 +132,8 @@ router
 
     try {
       const user = await loginUser(
-        emailAddressInput.toLowerCase(),
-        passwordInput
+        trimmedEmailAddress.toLowerCase(),
+        trimmedPassword
       );
 
       if (user) {
@@ -147,6 +160,7 @@ router
       res.status(400).render("login", { error: error.message });
     }
   });
+
 
 router.route("/protected").get(async (req, res) => {
   if (req.session.user.role === "admin") {

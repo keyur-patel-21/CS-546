@@ -2,7 +2,7 @@ import { users } from "../config/mongoCollections.js";
 import bcrypt from 'bcryptjs';
 
 const validateEmail = (email) => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
   return emailRegex.test(email);
 };
 
@@ -36,6 +36,12 @@ export const registerUser = async (
   password,
   role
 ) => {
+  firstName = firstName.trim();
+  lastName = lastName.trim();
+  emailAddress = emailAddress.trim();
+  password = password.trim();
+  role = role.trim();
+
   if (
     !firstName ||
     !lastName ||
@@ -97,7 +103,11 @@ export const registerUser = async (
   }
 };
 
+
 export const loginUser = async (emailAddress, password) => {
+  emailAddress = emailAddress.trim();
+  password = password.trim();
+
   if (!emailAddress || !password || typeof emailAddress !== 'string' || typeof password !== 'string') {
     throw 'Both emailAddress and password must be supplied.';
   }
@@ -107,7 +117,7 @@ export const loginUser = async (emailAddress, password) => {
   }
 
   const lowerCaseEmail = emailAddress.toLowerCase();
-
+  
   const userCollection = await users();
   const user = await userCollection.findOne({ email: lowerCaseEmail });
 
@@ -124,3 +134,4 @@ export const loginUser = async (emailAddress, password) => {
     throw 'Either the email address or password is invalid.';
   }
 };
+
