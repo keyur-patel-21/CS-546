@@ -1,6 +1,4 @@
-// client_side_validation.js
-
-document.addEventListener("DOMContentLoaded", function () {
+window.addEventListener("load", function () {
   const registrationForm = document.getElementById("registration-form");
   const loginForm = document.getElementById("login-form");
 
@@ -16,6 +14,8 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function validateRegistrationForm() {
+    clearError(registrationForm);
+
     const firstName = document.getElementById("firstNameInput").value;
     const lastName = document.getElementById("lastNameInput").value;
     const email = document.getElementById("emailAddressInput").value;
@@ -24,37 +24,37 @@ document.addEventListener("DOMContentLoaded", function () {
     const role = document.getElementById("roleInput").value;
 
     if (!firstName || !lastName || !email || !password || !confirmPassword || !role) {
-      displayError("All fields are required");
+      displayError(registrationForm, "All fields are required");
       return false;
     }
 
     if (!/^[a-zA-Z]{2,25}$/.test(firstName)) {
-      displayError("Invalid firstNameInput");
+      displayError(registrationForm, "Invalid first name");
       return false;
     }
 
     if (!/^[a-zA-Z]{2,25}$/.test(lastName)) {
-      displayError("Invalid lastNameInput");
+      displayError(registrationForm, "Invalid last name");
       return false;
     }
 
     if (!isValidEmail(email)) {
-      displayError("Invalid emailAddressInput");
+      displayError(registrationForm, "Invalid email address format");
       return false;
     }
 
     if (!isValidPassword(password)) {
-      displayError("Invalid passwordInput");
+      displayError(registrationForm, "Invalid password");
       return false;
     }
 
     if (password !== confirmPassword) {
-      displayError("Password and confirmPassword do not match");
+      displayError(registrationForm, "Password and confirmPassword do not match");
       return false;
     }
 
     if (role !== "admin" && role !== "user") {
-      displayError("Invalid roleInput");
+      displayError(registrationForm, "Invalid role");
       return false;
     }
 
@@ -63,16 +63,18 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function validateLoginForm() {
+    clearError(loginForm);
+
     const email = document.getElementById("emailAddressInput").value;
     const password = document.getElementById("passwordInput").value;
 
     if (!email || !password) {
-      displayError("Email address and password are required");
+      displayError(loginForm, "Email address and password are required");
       return false;
     }
 
     if (!isValidEmail(email)) {
-      displayError("Invalid email address format");
+      displayError(loginForm, "Invalid email address format");
       return false;
     }
 
@@ -80,9 +82,14 @@ document.addEventListener("DOMContentLoaded", function () {
     return true;
   }
 
-  function displayError(message) {
-    const errorElement = document.getElementById("error-message");
+  function displayError(form, message) {
+    const errorElement = form.querySelector(".error-message");
     errorElement.textContent = message;
+  }
+
+  function clearError(form) {
+    const errorElement = form.querySelector(".error-message");
+    errorElement.textContent = "";
   }
 
   registrationForm.addEventListener("submit", function (event) {

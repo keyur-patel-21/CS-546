@@ -41,7 +41,7 @@ app.use((req, res, next) => {
   const timestamp = new Date().toUTCString();
   const isAuthenticated = req.session.user ? true : false;
   const userRole = req.session.user
-    ? req.session.user.role
+    ? "Authenticated User"
     : "Non-Authenticated User";
 
   console.log(`[${timestamp}]: ${req.method} ${req.originalUrl} (${userRole})`);
