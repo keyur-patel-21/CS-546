@@ -153,7 +153,7 @@ router.route("/protected").get(async (req, res) => {
 });
 
 router.route("/admin").get(async (req, res) => {
-  res.render("admin");
+  res.render("admin", {firstName: req.session.user.firstName, lastName: req.session.user.lastName, currentTime: new Date(), role: req.session.user.role});
 });
 
 router.route("/error").get(async (req, res) => {

@@ -46,7 +46,7 @@ app.use((req, res, next) => {
 
   console.log(`[${timestamp}]: ${req.method} ${req.originalUrl} (${userRole})`);
 
-  if (req.originalUrl === "/login" || req.originalUrl === "/register" || req.originalUrl === "/protected") {
+  if (req.originalUrl === "/login" || req.originalUrl === "/register" || req.originalUrl === "/protected" || req.originalUrl === "/admin") {
     return next();
   }
 
