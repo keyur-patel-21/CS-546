@@ -149,11 +149,21 @@ router
   });
 
 router.route("/protected").get(async (req, res) => {
-  res.render("protected", {firstName: req.session.user.firstName, lastName: req.session.user.lastName, currentTime: new Date(), role: req.session.user.role});
+  res.render("protected", {
+    firstName: req.session.user.firstName,
+    lastName: req.session.user.lastName,
+    currentTime: new Date(),
+    role: req.session.user.role,
+  });
 });
 
 router.route("/admin").get(async (req, res) => {
-  res.render("admin", {firstName: req.session.user.firstName, lastName: req.session.user.lastName, currentTime: new Date(), role: req.session.user.role});
+  res.render("admin", {
+    firstName: req.session.user.firstName,
+    lastName: req.session.user.lastName,
+    currentTime: new Date(),
+    role: req.session.user.role,
+  });
 });
 
 router.route("/error").get(async (req, res) => {
@@ -166,9 +176,10 @@ router.route("/error").get(async (req, res) => {
 });
 
 router.route("/logout").get(async (req, res) => {
-  res.clearCookie("AuthState");
-
-  res.render("logout", { message: "You have been successfully logged out." });
+  if (req.session.user) {
+    req.session.destroy();
+    res.status(200).render("logout", { title: "Logout" });
+  }
 });
 
 export default router;
