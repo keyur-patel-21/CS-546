@@ -1,18 +1,14 @@
-/* styles.css */
 
-/* Rule Set 1: General Page Styling */
 body {
   font-family: 'Arial', sans-serif;
   background-color: #f4f4f4;
   color: #333;
 }
 
-/* Rule Set 2: Header Styling */
 h1 {
   color: #0066cc;
 }
 
-/* Rule Set 3: Form Styling */
 form {
   max-width: 400px;
   margin: 20px auto;
@@ -23,7 +19,6 @@ form {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Rule Set 4: Link Styling */
 a {
   color: #009688;
   text-decoration: none;
@@ -33,7 +28,6 @@ a:hover {
   text-decoration: underline;
 }
 
-/* Rule Set 5: Button Styling */
 button {
   background-color: #009688;
   color: #fff;

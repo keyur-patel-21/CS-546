@@ -1,20 +1,16 @@
-// import mongo collections, bcrypt, and implement the following data functions
 import { users } from "../config/mongoCollections.js";
 import bcrypt from 'bcryptjs';
 
 const validateEmail = (email) => {
-  // Regular expression for a valid email address
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 };
 
-// Placeholder for MongoDB function to check duplicate email
 const checkDuplicateEmail = async (email) => {
   const existingUser = await users.findOne({ email });
   return !!existingUser;
 };
 
-// Placeholder for MongoDB function to insert user
 const insertUser = async (firstName, lastName, email, hashedPassword, role) => {
   try {
     const result = await users.insertOne({
@@ -67,28 +63,23 @@ export const registerUser = async (
 
   const lowerCaseEmail = emailAddress.toLowerCase();
 
-  // Check for duplicate email address in the database
   const isDuplicateEmail = await checkDuplicateEmail(lowerCaseEmail);
   if (isDuplicateEmail) {
     throw 'Email address already exists.';
   }
 
-  // Validate password
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   if (!passwordRegex.test(password)) {
     throw 'Invalid password.';
   }
 
-  // Hash the password
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  // Validate role
   const lowerCaseRole = role.toLowerCase();
   if (lowerCaseRole !== 'admin' && lowerCaseRole !== 'user') {
     throw 'Invalid role.';
   }
 
-  // Insert user into the database
   const insertSuccess = await insertUser(
     firstName,
     lastName,
@@ -115,18 +106,15 @@ export const loginUser = async (emailAddress, password) => {
 
   const lowerCaseEmail = emailAddress.toLowerCase();
 
-  // Query the database for the user with the given email address
   const user = await users.findOne({ email: lowerCaseEmail });
 
   if (!user) {
     throw 'Either the email address or password is invalid.';
   }
 
-  // Compare the hashed password in the database with the input password
   const passwordMatch = await bcrypt.compare(password, user.password);
 
   if (passwordMatch) {
-    // Return user information without the password
     const { firstName, lastName, email, role } = user;
     return { firstName, lastName, email, role };
   } else {
