@@ -13,3 +13,41 @@ A label with a for attribute referencing your input
 A button to submit the form
 A link that links back to the "/" route with the text "Back to All Shows" and that has an id of rootLink This link will initially be hidden. It will ONLY be displayed when the showDetails element is being displayed or ONLY when a search is performed and search results are being displayed.  You should NOT show this link on the initial show list.  This link will simply trigger a reload of the page, which then will display the initial list of shows
  -->
+
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Your Site Name</title>
+   <link rel="stylesheet" href="styles.css">
+ </head>
+ <body>
+   <header>
+     <h1>Your Site Name</h1>
+     <p>Your Page Title</p>
+   </header>
+ 
+   <form id="searchShows">
+     <label for="show_search_term">Search Shows:</label>
+     <input type="text" id="show_search_term">
+     <button type="submit">Search</button>
+   </form>
+ 
+   <ul id="tvShowList" class="hidden"></ul>
+ 
+   <div id="showDetails" class="hidden"></div>
+ 
+   <footer>
+     <p>Your Name</p>
+     <p>Your Student ID</p>
+     <!-- Add any other information about yourself here -->
+   </footer>
+ 
+   <a href="/" id="rootLink" class="hidden">Back to All Shows</a>
+ 
+   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+   <script src="script.js"></script>
+ </body>
+ </html>
+ 

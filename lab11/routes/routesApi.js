@@ -1,7 +1,10 @@
 // Set-Up Routes
 
-router
-  .route('/')
-  .get(async (req, res) => {
-    //code here for GET to show static HTML flie
-  })
+import { Router } from "express";
+const router = Router();
+
+router.get("/", (req, res) => {
+  res.render("static/webpage", { partial: "static_script" });
+});
+
+export default router;

@@ -1,3 +1,7 @@
 /*
 You must include 10 CSS rules that aply to your application
 */
+
+.hidden {
+  display: none;
+}
