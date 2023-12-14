@@ -19,18 +19,18 @@ A link that links back to the "/" route with the text "Back to All Shows" and th
  <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Lab11</title>
+   <title>Keyur's Watchlist</title>
    <link rel="stylesheet" href="http://localhost:3000/css/styles.css">
  </head>
  <body>
    <header>
-     <h1>Your Site Name</h1>
-     <p>Your Page Title</p>
+     <h1>Keyur's Watchlist</h1>
+     <p>All Shows</p>
    </header>
  
    <form id="searchShows">
      <label for="show_search_term">Search Shows:</label>
-     <input type="text" id="show_search_term">
+     <input type="text" id="show_search_term" placeholder="Enter Show name">
      <button type="submit">Search</button>
    </form>
  
@@ -38,13 +38,13 @@ A link that links back to the "/" route with the text "Back to All Shows" and th
  
    <div id="showDetails" class="hidden"></div>
  
+   <a href="/" id="rootLink" class="hidden">Back to All Shows</a>
    <footer>
      <p>Name: Keyur Patel</p>
      <p>Student ID: 20010939  </p>
      <!-- Add any other information about yourself here -->
    </footer>
  
-   <a href="/" id="rootLink" class="hidden">Back to All Shows</a>
  
    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
    <script src="http://localhost:3000/js/main.js"></script>
