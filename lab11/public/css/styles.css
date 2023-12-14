@@ -1,6 +1,39 @@
 /*
 You must include 10 CSS rules that aply to your application
 */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+main {
+  width: 100%;
+  max-width: 600px; /* Adjust the maximum width as needed */
+  margin: 0 auto; /* Center the main content */
+}
+
+header, footer {
+  width: 100%;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 10px;
+}
+
+#tvShowList, #showDetails {
+  width: 100%;
+  max-width: 600px; /* Adjust the maximum width as needed */
+  margin: 20px auto; /* Center the tvShowList and showDetails */
+}
+
+/* Add the rest of your styles below */
+
 
 /* Add your styling here */
 body {
