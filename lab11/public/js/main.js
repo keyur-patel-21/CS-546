@@ -75,21 +75,36 @@ $(document).ready(function () {
   });
 });
 
-function populateShowList(shows) {
-  let tvShowList = $("#tvShowList");
-
-  // Iterate through the shows and create list items with links
-  shows.forEach(function (show) {
-      let listItem = $("<li></li>");
-      let link = $("<a></a>").attr("href", show._links.self.href).text(show.name);
-
-      listItem.append(link);
-      tvShowList.append(listItem);
-  });
-
-  // Show the tvShowList
-  tvShowList.show();
-}
+function populateShowList(data) {
+    let tvShowList = $("#tvShowList");
+  
+    // Check if the data has a 'self' property, indicating it's from the initial API
+    if (data[0] && data[0]._links && data[0]._links.self) {
+      // Iterate through the shows and create list items with links
+      data.forEach(function (show) {
+        let listItem = $("<li></li>");
+        let link = $("<a></a>").attr("href", show._links.self.href).text(show.name);
+  
+        listItem.append(link);
+        tvShowList.append(listItem);
+      });
+    } else {
+      // Handle the data structure from the search API
+      data.forEach(function (result) {
+        let show = result.show;
+        let listItem = $("<li></li>");
+        let link = $("<a></a>").attr("href", show._links.self.href).text(show.name);
+  
+        listItem.append(link);
+        tvShowList.append(listItem);
+      });
+    }
+  
+    // Show the tvShowList
+    tvShowList.show();
+  }
+  
+  
 
 function populateShowDetails(showData) {
   let showDetails = $("#showDetails");
