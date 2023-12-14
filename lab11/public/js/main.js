@@ -77,25 +77,37 @@ function populateShowList(data) {
 function populateShowDetails(showData) {
   let showDetails = $("#showDetails");
   let title = $("<h1></h1>").text(showData.name);
-  let image = $("<img>").attr(
-    "src",
-    showData.image
-      ? showData.image.medium
-      : "http://localhost:3000/images/no_image.jpeg"
-  );
-  let language = $("<p></p>").text("Language: " + (showData.language || "N/A"));
-  let genres = $("<p></p>").text(
-    "Genres: " + (showData.genres ? showData.genres.join(", ") : "N/A")
-  );
-  let rating = $("<p></p>").text(
-    "Rating: " + (showData.rating ? showData.rating.average : "N/A")
-  );
-  let network = $("<p></p>").text(
-    "Network: " + (showData.network ? showData.network.name : "N/A")
-  );
-  let summary = $("<p></p>").html("Summary: " + (showData.summary || "N/A"));
+  let image = $("<img>").attr("src", showData.image ? showData.image.medium : "http://localhost:3000/images/no_image.jpeg");
+  let language = $("<dt></dt>").text("Language");
+  let languageValue = $("<dd></dd>").text(showData.language || "N/A");
+  let genres = $("<dt></dt>").text("Genres");
+  let genresList = $("<ul></ul>");
 
-  showDetails.append(title, image, language, genres, rating, network, summary);
+  if (showData.genres) {
+    showData.genres.forEach(function (genre) {
+      genresList.append($("<li></li>").text(genre));
+    });
+  } else {
+    genresList.append($("<li></li>").text("N/A"));
+  }
+
+  let rating = $("<dt></dt>").text("Rating");
+  let ratingValue = $("<dd></dd>").text(showData.rating ? showData.rating.average : "N/A");
+  let network = $("<dt></dt>").text("Network");
+  let networkValue = $("<dd></dd>").text(showData.network ? showData.network.name : "N/A");
+  let summary = $("<dt></dt>").text("Summary");
+  let summaryValue = $("<dd></dd>").html(showData.summary || "N/A");
+
+  let definitionList = $("<dl></dl>").append(
+    language, languageValue,
+    genres, genresList,
+    rating, ratingValue,
+    network, networkValue,
+    summary, summaryValue
+  );
+
+  showDetails.append(title, image, definitionList);
   showDetails.show();
   $("#rootLink").show();
 }
+
