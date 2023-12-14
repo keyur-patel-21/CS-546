@@ -107,7 +107,7 @@ function populateShowDetails(showData) {
 
   // Create elements for show details
   let title = $("<h1></h1>").text(showData.name);
-  let image = $("<img>").attr("src", showData.image ? showData.image.medium : "path/to/no_image.jpeg");
+  let image = $("<img>").attr("src", showData.image ? showData.image.medium : "http://localhost:3000/images/no_image.jpeg");
   let language = $("<p></p>").text("Language: " + (showData.language || "N/A"));
   let genres = $("<p></p>").text("Genres: " + (showData.genres ? showData.genres.join(", ") : "N/A"));
   let rating = $("<p></p>").text("Rating: " + (showData.rating ? showData.rating.average : "N/A"));
