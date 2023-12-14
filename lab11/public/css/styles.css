@@ -1,6 +1,3 @@
-/*
-You must include 10 CSS rules that aply to your application
-*/
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -14,8 +11,8 @@ body {
 
 main {
   width: 100%;
-  max-width: 600px; /* Adjust the maximum width as needed */
-  margin: 0 auto; /* Center the main content */
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 header, footer {
@@ -28,14 +25,10 @@ header, footer {
 
 #tvShowList, #showDetails {
   width: 100%;
-  max-width: 600px; /* Adjust the maximum width as needed */
-  margin: 20px auto; /* Center the tvShowList and showDetails */
+  max-width: 600px;
+  margin: 20px auto;
 }
 
-/* Add the rest of your styles below */
-
-
-/* Add your styling here */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
