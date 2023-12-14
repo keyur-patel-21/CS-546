@@ -1,52 +1,34 @@
-<!-- 
-Static HTML file 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Keyur's Watchlist</title>
+  <link rel="stylesheet" href="http://localhost:3000/css/styles.css">
+</head>
+<body>
+  <header>
+    <h1>Keyur's Watchlist</h1>
+    <p>All Shows</p>
+  </header>
 
-Your page should have a few basic user interface elements:
+  <form id="searchShows">
+    <label for="show_search_term">Search Shows:</label>
+    <input type="text" id="show_search_term" placeholder="Enter Show name">
+    <button type="submit">Search</button>
+  </form>
 
-A header tag, with an h1 naming your site, with a title for your page (the title tag in the head element should mimic this)
-A footer with your name, student ID, and any other info about yourself you wish to include
-An empty unordered list with an id of tvShowList that is initially hidden.  
-A div with an id of showDetails that is initially hidden.
-A form with an id of searchShows.
-A text input with an id of show_search_term.
-A label with a for attribute referencing your input
-A button to submit the form
-A link that links back to the "/" route with the text "Back to All Shows" and that has an id of rootLink This link will initially be hidden. It will ONLY be displayed when the showDetails element is being displayed or ONLY when a search is performed and search results are being displayed.  You should NOT show this link on the initial show list.  This link will simply trigger a reload of the page, which then will display the initial list of shows
- -->
+  <ul id="tvShowList" class="hidden"></ul>
 
- <!DOCTYPE html>
- <html lang="en">
- <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Keyur's Watchlist</title>
-   <link rel="stylesheet" href="http://localhost:3000/css/styles.css">
- </head>
- <body>
-   <header>
-     <h1>Keyur's Watchlist</h1>
-     <p>All Shows</p>
-   </header>
- 
-   <form id="searchShows">
-     <label for="show_search_term">Search Shows:</label>
-     <input type="text" id="show_search_term" placeholder="Enter Show name">
-     <button type="submit">Search</button>
-   </form>
- 
-   <ul id="tvShowList" class="hidden"></ul>
- 
-   <div id="showDetails" class="hidden"></div>
- 
-   <a href="/" id="rootLink" class="hidden">Back to All Shows</a>
-   <footer>
-     <p>Name: Keyur Patel</p>
-     <p>Student ID: 20010939  </p>
-   </footer>
- 
- 
-   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-   <script src="http://localhost:3000/js/main.js"></script>
- </body>
- </html>
- 
+  <div id="showDetails" class="hidden"></div>
+
+  <a href="/" id="rootLink" class="hidden">Back to All Shows</a>
+  <footer>
+    <p>Name: Keyur Patel</p>
+    <p>Student ID: 20010939  </p>
+  </footer>
+
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="http://localhost:3000/js/main.js"></script>
+</body>
+</html>
